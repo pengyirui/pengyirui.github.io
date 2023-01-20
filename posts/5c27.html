@@ -1,0 +1,258 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>JDBC | 食葫芦的葫芦娃</title><meta name="keywords" content="java,SQL"><meta name="author" content="葫芦"><meta name="copyright" content="葫芦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="封装dao类差点被绕晕。。。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JDBC">
+<meta property="og:url" content="https://pengyirui.github.io/posts/5c27.html">
+<meta property="og:site_name" content="食葫芦的葫芦娃">
+<meta property="og:description" content="封装dao类差点被绕晕。。。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-09-08-00.jpeg">
+<meta property="article:published_time" content="2021-09-08T13:59:02.000Z">
+<meta property="article:modified_time" content="2022-07-27T07:16:15.357Z">
+<meta property="article:author" content="葫芦">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="SQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-09-08-00.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://pengyirui.github.io/posts/5c27"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 葫芦","link":"链接: ","source":"来源: 食葫芦的葫芦娃","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'JDBC',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-07-27 15:16:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/font_2170815_diyzt5u455i.css"><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">食葫芦的葫芦娃</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">JDBC</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-08T13:59:02.000Z" title="发表于 2021-09-08 21:59:02">2021-09-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-27T07:16:15.357Z" title="更新于 2022-07-27 15:16:15">2022-07-27</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JDBC"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Java DataBase Connectivity（数据库连接）</p>
+<ul>
+<li><p>概念<br>  用于执行SQL语句的 Java API，可以为多种关系型数据库提供统一的资源访问，它本身就是由Java编写的<br>  JDBC对于程序员来说就是一套API，对数据库厂商而言，是接口模型。</p>
+</li>
+<li><p>简单来说：JDBC可以做三件事</p>
+<ol>
+<li>建立数据库的连接</li>
+<li>发送操作数据库的SQL语句</li>
+<li>返回数据库查询出的结果集</li>
+</ol>
+</li>
+<li><p>开发步骤：</p>
+<ol start="0">
+<li>导包</li>
+<li>注册驱动</li>
+<li>连接数据库</li>
+<li>发送SQL语句</li>
+<li>设置占位符    *</li>
+<li>执行SQL语句</li>
+<li>关闭访问资源</li>
+</ol>
+</li>
+<li><p>注意<br>  占位符:避免mysql注入。有值，但是不确定值是多少。<br>  增、删、改：<code>executeUpdate()</code><br>  查：<code>excuteQuery()</code></p>
+</li>
+</ul>
+<h3 id="看代码"><a href="#看代码" class="headerlink" title="看代码"></a>看代码</h3><ul>
+<li>JDBC通信规则涉及的API<ol>
+<li>java.sql.Driver接口<br>声明了用于建立通信通道的方法名由Driver接口修饰对象相当于”隧道工人”  <code>Driver obj</code></li>
+<li>java.sql.Connection接口<br>声明了用于维护通信通道的方法名由Connection接口修饰对象,相当于”道路养护工”  <code>Connection obj</code></li>
+<li>java.sql.PreparedStatement接口<br>声明了用于推送通信信息的方法名由PreparedStatement接口修饰对象,相当于”快递小哥” <code>PreparedStatement obj</code></li>
+<li>java.sql.ResultSet接口<br>声明了操作查询之后生成的临时表的方法名由ResultSet接口修饰的对象,相当于”临时表管理员”  <code>ResultSet obj</code></li>
+<li>java.sql.DriverManager类<br>负责调用由数据库厂商提供的Driver接口实现类的实例对象去打通通道,相当于”监工”</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 查询例子：</span></span><br><span class="line"><span class="comment">// 注册驱动</span></span><br><span class="line">Class.forName(<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 链接数据库（维护通道）</span></span><br><span class="line"><span class="type">Connection</span> <span class="variable">connection</span> <span class="operator">=</span> DriverManager.getConnection(<span class="string">&quot;jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=utf8&quot;</span>, <span class="string">&quot;root&quot;</span>, <span class="string">&quot;123456&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编写sql语句 并且准备 推送/接收通信</span></span><br><span class="line"><span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;select * from emp&quot;</span>;</span><br><span class="line"><span class="type">PreparedStatement</span> <span class="variable">ps</span> <span class="operator">=</span> connection.prepareStatement(sql);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行通信之查询</span></span><br><span class="line"><span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> ps.executeQuery();    <span class="comment">//此处是查询，返回的是结果集</span></span><br><span class="line"><span class="comment">// 遍历结果集</span></span><br><span class="line"><span class="keyword">while</span> (rs.next())&#123;</span><br><span class="line">    System.out.print(rs.getInt(<span class="string">&quot;empno&quot;</span>) + <span class="string">&quot;\t&quot;</span>);</span><br><span class="line">    System.out.print(rs.getString(<span class="string">&quot;ename&quot;</span>) + <span class="string">&quot;\t&quot;</span>);</span><br><span class="line">    System.out.print(rs.getString(<span class="string">&quot;job&quot;</span>) + <span class="string">&quot;\t&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 批量操作并且开启事务</span></span><br><span class="line">con.setAutoCommit(<span class="literal">false</span>);    <span class="comment">//设置开启事务</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">50</span>;i&lt;<span class="number">55</span>;i++)&#123;    </span><br><span class="line">    ps.setInt(<span class="number">1</span>, i);</span><br><span class="line">    ps.setString(<span class="number">2</span>, <span class="string">&quot;dept_&quot;</span>+i);</span><br><span class="line">    ps.setString(<span class="number">3</span>, <span class="string">&quot;上海&quot;</span>);</span><br><span class="line">    ps.addBatch();          <span class="comment">//类似集合，每次加入</span></span><br><span class="line">&#125;</span><br><span class="line">ps.executeBatch();<span class="comment">//通知ps将batch中sql语句一次性推送推送过去</span></span><br><span class="line">con.commit();<span class="comment">//成功则推送</span></span><br><span class="line">con.rollback();<span class="comment">//失败则回滚</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 最后关闭流</span></span><br><span class="line">rs.close();</span><br><span class="line">ps.close();</span><br><span class="line">connection.close();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 新增例子：</span></span><br><span class="line"><span class="comment">// 注册驱动</span></span><br><span class="line">Class.forName(<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//链接数据库</span></span><br><span class="line"><span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(<span class="string">&quot;jdbc:mysql://127.0.0.1:3306/gz2107?useUnicode=true&amp;characterEncoding=utf8&quot;</span>, <span class="string">&quot;root&quot;</span>, <span class="string">&quot;123456&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//编写sql语句</span></span><br><span class="line"><span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;insert into emp (name,salary,age) VALUES (?,?,?);&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//设置sql语句</span></span><br><span class="line"><span class="type">PreparedStatement</span> <span class="variable">ps</span> <span class="operator">=</span> conn.prepareStatement(sql);</span><br><span class="line"></span><br><span class="line"><span class="comment">//根据sql和表设置占位符</span></span><br><span class="line">ps.setString(<span class="number">1</span>, <span class="string">&quot;Peng&quot;</span>);</span><br><span class="line">ps.setInt(<span class="number">2</span>, <span class="number">3000</span>);</span><br><span class="line">ps.setInt(<span class="number">3</span>, <span class="number">22</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//发送sql语句</span></span><br><span class="line">ps.executeUpdate();   <span class="comment">//此处是增删改用到的，返回值是int类型</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意！！！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ps.executeUpdate() 与 ps.executeQuery()区别：</span><br><span class="line"></span><br><span class="line">1.推送的SQL语句类型不同</span><br><span class="line">    ps.executeUpdate()：负责推送DML语句（Insert/update/delete）</span><br><span class="line">    ps.executeQuery()：负责推送DQL语句（select）</span><br><span class="line"></span><br><span class="line">2.返回结果不同</span><br><span class="line">    ps.executeUpdate()：返回 int 类型数据；表示本次插入了多少行数据，或者删除了多少行数据，或者更新了多少行数据</span><br><span class="line">    ps.executeQuery()：返回 ResultSet 类型，表示本次查询时得到的这个临时表</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据库连接池"><a href="#数据库连接池" class="headerlink" title="数据库连接池"></a>数据库连接池</h2><ul>
+<li><p>存在的问题<br>  普通的JDBC数据库连接使用的是<code>DriverManager</code>来获取，每次向数据库建立连接的时候都要将<code>connection</code>加载到内存。频繁链接断开这样的方式极大地消耗大量的资源和时间。</p>
+</li>
+<li><p>概念<br>  数据库连接建立一个”缓冲池”，预选在缓冲池中放入一定数量的连接，当需要建立数据库连接时，只需要从”缓冲池”中取一个使用完毕之后再放回去。数据库连接池负责分配，管理和释放数据库连接，允许应用程序重复使用一个现有的数据库连接，而不是重新建立。</p>
+</li>
+<li><p>常用的数据库连接池。<br>  C3P0【已经没落】<br>  druid【德鲁伊】alibaba 开源项目<br>  DBCP 全称：DataBase Connection Pool。Apache的一个开源项目</p>
+</li>
+</ul>
+<h2 id="dao"><a href="#dao" class="headerlink" title="dao"></a>dao</h2><p>Data Access Object【数据访问逻辑】</p>
+<ul>
+<li>概念<br>  封装了数据访问的细节，对于其它层来说是透明的，看不见的。</li>
+<li>如何写一个DAO?<ol>
+<li>实体类【pojo、entity】<br>为了方便处理数据库中的记录，可以定义一个与数据库中的表对应的实体类。<br>即表名—类名，列名—属性名。</li>
+<li>dao接口<br>声明一些数据访问方法，这些方法都是抽象的。</li>
+<li>dao接口的实现类<br>用于实现dao接口中具体的数据库访问细节。</li>
+<li>dao工厂<br>根据配置信息来获取不同的dao实现对象。</li>
+</ol>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://pengyirui.github.io">葫芦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://pengyirui.github.io/posts/5c27.html">https://pengyirui.github.io/posts/5c27.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://pengyirui.github.io" target="_blank">食葫芦的葫芦娃</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/java/">java</a><a class="post-meta__tags" href="/tags/SQL/">SQL</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-09-08-00.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/ee8d.html"><img class="prev-cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-09-12-00.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">HTML &amp; CSS &amp; BootStrap</div></div></a></div><div class="next-post pull-right"><a href="/posts/f21e.html"><img class="next-cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-05-11-00.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">javaSE</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/31ed.html" title="MyCat"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_3.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-30</div><div class="title">MyCat</div></div></a></div><div><a href="/posts/3b8.html" title="设计模式"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_3.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-19</div><div class="title">设计模式</div></div></a></div><div><a href="/posts/d973.html" title="Dubbo"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-12-05-51.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-13</div><div class="title">Dubbo</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">葫芦</div><div class="author-info__description">记录互联网上的点点滴滴</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/pengyirui"><i class="fab fa-github"></i><span>并没有开源项目的GitHub</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://raw.githubusercontent.com/pengyirui/blog_img/main/weixin.jpg" target="_blank" title="微信"><i class="iconfont icon-wechat"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=1224976993" target="_blank" title="QQ"><i class="iconfont icon-qq"></i></a><a class="social-icon" href="https://space.bilibili.com/8700057" target="_blank" title="哔哩哔哩"><i class="iconfont icon-bilibili-copy"></i></a><a class="social-icon" href="https://raw.githubusercontent.com/pengyirui/blog_img/main/coolapk_addme.png" target="_blank" title="酷安"><i class="iconfont icon-kuan"></i></a><a class="social-icon" href="https://music.163.com/#/user/home?id=293495280" target="_blank" title="网易云音乐"><i class="iconfont icon-wangyiyunyinle"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>自言自语</span></div><div class="announcement_content">倘若无法意识到无意识，它就会指挥你的生活，然后你称之为命运。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9C%8B%E4%BB%A3%E7%A0%81"><span class="toc-number">1.1.</span> <span class="toc-text">看代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="toc-number">2.</span> <span class="toc-text">数据库连接池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dao"><span class="toc-number">3.</span> <span class="toc-text">dao</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/3b8.html" title="设计模式"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式"/></a><div class="content"><a class="title" href="/posts/3b8.html" title="设计模式">设计模式</a><time datetime="2023-01-19T02:49:02.000Z" title="发表于 2023-01-19 10:49:02">2023-01-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3b8.html" title="文章、教程记录"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_8.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文章、教程记录"/></a><div class="content"><a class="title" href="/posts/3b8.html" title="文章、教程记录">文章、教程记录</a><time datetime="2022-08-10T02:49:02.000Z" title="发表于 2022-08-10 10:49:02">2022-08-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1dft.html" title="java新特性"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-05-11-00.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java新特性"/></a><div class="content"><a class="title" href="/posts/1dft.html" title="java新特性">java新特性</a><time datetime="2022-07-27T02:00:02.000Z" title="发表于 2022-07-27 10:00:02">2022-07-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1df.html" title="博客搬家"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_6.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="博客搬家"/></a><div class="content"><a class="title" href="/posts/1df.html" title="博客搬家">博客搬家</a><time datetime="2022-07-24T02:00:02.000Z" title="发表于 2022-07-24 10:00:02">2022-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1dfc.html" title="给函数取一个好的名字"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_19.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="给函数取一个好的名字"/></a><div class="content"><a class="title" href="/posts/1dfc.html" title="给函数取一个好的名字">给函数取一个好的名字</a><time datetime="2022-01-01T02:00:02.000Z" title="发表于 2022-01-01 10:00:02">2022-01-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2023 By 葫芦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">-我可是有底线的-</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-silk-iota.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-silk-iota.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><center><script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1279698527'%3E%3C/span%3E%3Cscript src='https://s4.cnzz.com/z_stat.php%3Fid%3D1279698527%26online%3D2' type='text/javascript'%3E%3C/script%3E"));</script></center><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="122,115,116" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

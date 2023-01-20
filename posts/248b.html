@@ -1,0 +1,269 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Nginx | 食葫芦的葫芦娃</title><meta name="keywords" content="java"><meta name="author" content="葫芦"><meta name="copyright" content="葫芦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="操作最多的就是配置文件呗">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx">
+<meta property="og:url" content="https://pengyirui.github.io/posts/248b.html">
+<meta property="og:site_name" content="食葫芦的葫芦娃">
+<meta property="og:description" content="操作最多的就是配置文件呗">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-12-26-0.jpeg">
+<meta property="article:published_time" content="2021-12-26T02:49:02.000Z">
+<meta property="article:modified_time" content="2022-07-27T07:16:15.357Z">
+<meta property="article:author" content="葫芦">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-12-26-0.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://pengyirui.github.io/posts/248b"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 葫芦","link":"链接: ","source":"来源: 食葫芦的葫芦娃","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Nginx',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-07-27 15:16:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/font_2170815_diyzt5u455i.css"><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">食葫芦的葫芦娃</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Nginx</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-26T02:49:02.000Z" title="发表于 2021-12-26 10:49:02">2021-12-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-27T07:16:15.357Z" title="更新于 2022-07-27 15:16:15">2022-07-27</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Nginx"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>软件层面一般常用Nginx来做反向代理服务器，它的性能非常好，用来做负载均衡。<br>官网：<a target="_blank" rel="noopener" href="http://nginx.org/">http://nginx.org</a></p>
+<hr>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>因为他是C语言的，所以下载下来的源码需要编译才能运行</p>
+<ul>
+<li>gcc编译器是否安装<br>  检查是否安装：<code>yum list installed | grep gcc</code><br>  执行安装：<code>yum install gcc -y</code></li>
+<li>openssl库是否安装<br>  检查是否安装：<code>yum list installed | grep openssl</code><br>  执行安装：<code>yum install openssl openssl-devel -y</code></li>
+<li>pcre库是否安装<br>  检查是否安装：<code>yum list installed | grep pcre</code><br>  执行安装：<code>yum install pcre pcre-devel -y</code></li>
+<li>zlib库是否安装<br>  检查是否安装：<code>yum list installed | grep zlib</code><br>  执行安装：<code>yum install zlib zlib-devel -y</code></li>
+<li>一次性安装，执行如下命令<br>  <code>yum install gcc openssl openssl-devel pcre pcre-devel zlib zlib-devel -y</code></li>
+</ul>
+<p>解压下载下来的nginx文件，执行命令：<code>tar -zxvf nginx-1.14.2.tar.gz</code><br>切换至解压后的nginx主目录，执行命令：<code>cd nginx-1.14.2</code><br>在nginx主目录nginx-1.14.2下执行命令：<code>./configure --prefix=/usr/local/nginx </code><br>（其中–prefix是指定nginx安装路径）  <strong>注意:等号左右不要有空格</strong></p>
+<p>执行命令进行编译：<code>make</code><br>执行命令进行安装：<code>make install</code><br>安装成功后，可以切换到/usr/local/nginx目录下，查看内容<br>有 conf html logs sbin 目录</p>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><p>切换到nginx安装目录的sbin目录下，执行：</p>
+<ul>
+<li><p>普通启动<br>  <code>./nginx</code></p>
+</li>
+<li><p>通过配置文件启动<br>  <code>./nginx -c /usr/local/nginx/conf/nginx.conf</code></p>
+</li>
+<li><p>查看进程<br>  nginx 体系结构由 master 进程和其 worker 进程组成<br>  master 进程读取配置文件，并维护 worker 进程，而 worker 进程则对请求进行实际处理<br>  Nginx启动后，安装目录下会出现一些_tmp结尾的文件，这些是临时文件，不用管。<br>  <code>ps -ef | grep nginx</code></p>
+</li>
+<li><p>优雅关闭<br>  这种关闭方式会处理完请求后再关闭，所以称之为优雅的关闭,<br>  主pid为master，其他为子进程worker<br>  <code>kill -QUIT 主pid</code></p>
+</li>
+<li><p>快速关闭Nginx：<br>  这种关闭方式不管请求是否处理完成，直接关闭，比较暴力，称之为快速的关闭<br>  <code>kill -TERM 主pid</code></p>
+</li>
+<li><p>重启<br>  <code>./nginx -s reload</code></p>
+</li>
+<li><p>配置检查<br>  <code>./nginx -c /usr/local/nginx/conf/nginx.conf -t</code></p>
+</li>
+</ul>
+<h2 id="静态网站部署"><a href="#静态网站部署" class="headerlink" title="静态网站部署"></a>静态网站部署</h2><p>例子：将静态<strong>ace</strong>网站部署到Nginx服务器上</p>
+<p>把文件上传到<code>/opt/static/</code>下<br>修改nginx配置文件（注意层级在http—&gt;server—&gt;location）<br>注意要以分号结尾</p>
+<h3 id="通过ip直接访问"><a href="#通过ip直接访问" class="headerlink" title="通过ip直接访问"></a>通过ip直接访问</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    root   /opt/packages/ace;</span><br><span class="line">    index  index.html index.htm;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重启nginx，输入<code>IP</code>便能访问<br>例如：<code>http://192.168.235.128:80</code></p>
+<h3 id="通过ip-路径访问"><a href="#通过ip-路径访问" class="headerlink" title="通过ip+路径访问"></a>通过ip+路径访问</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location /ace &#123;</span><br><span class="line">    root /opt/static/;</span><br><span class="line">    index  index.html index.htm;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重启nginx，输入<code>IP+/ace</code>便能访问<br>例如：<code>http://192.168.235.128:80/ace</code></p>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><p>用户访问nginx，让他自动调度服务（此处是tomcat）</p>
+<p>修改配置文件<br>（注意层级在，http—&gt;upstream）<br>127.0.0.1:9100和127.0.0.1:9200是两台tomcat</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream www.myweb.com &#123; </span><br><span class="line">    server  127.0.0.1:9100; </span><br><span class="line">    server  127.0.0.1:9200;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>再在server模块里添加location，并配置proxy_pass<br>其中 <a target="_blank" rel="noopener" href="http://www.myweb.com/">www.myweb.com</a> 字符串要和 upstream 后面的字符串相等</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location /myweb &#123;</span><br><span class="line">    proxy_pass http://www.myweb.com;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ip+myweb便能访问<br>例如：<code>http://192.168.235.128:80/myweb</code></p>
+<h2 id="常用负载均衡策略"><a href="#常用负载均衡策略" class="headerlink" title="常用负载均衡策略"></a>常用负载均衡策略</h2><ul>
+<li><p>轮询（默认）<br>  注意：这里的轮询并不是每个请求轮流分配到不同的后端服务器，与ip_hash类似，但是按照访问url的hash结果来分配请求，使得每个url定向到同一个后端服务器，主要应用于后端服务器为缓存时的场景下。如果后端服务器down掉，将自动剔除</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line">   	server 127.0.0.1:8080; </span><br><span class="line">   	server 127.0.0.1:9090; </span><br><span class="line">   &#125; </span><br></pre></td></tr></table></figure></li>
+<li><p>权重<br>  每个请求按一定比例分发到不同的后端服务器，weight值越大访问的比例越大，用于后端服务器性能不均的情况</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line">   	server 192.168.0.14 weight=5; </span><br><span class="line">   	server 192.168.0.15 weight=2; </span><br><span class="line">   &#125; </span><br></pre></td></tr></table></figure></li>
+<li><p>ip_hash<br>  ip_hash也叫IP绑定，每个请求按访问ip的hash值分配，这样每个访问客户端会固定访问一个后端服务器，可以解决会话Session丢失的问题<br>  算法：hash(“124.207.55.82”) % 2 = 0, 1</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line">   	ip_hash; </span><br><span class="line">   	server 127.0.0.1:8080; </span><br><span class="line">   	server 127.0.0.1:9090; </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>最少连接<br>  web请求会被转发到连接数最少的服务器上</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backserver &#123; </span><br><span class="line">    least_conn;</span><br><span class="line">    server 127.0.0.1:8080; </span><br><span class="line">    server 127.0.0.1:9090; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h2><p>把所有静态资源的访问改为访问nginx，而不是访问tomcat，这种方式叫静态代理。因为nginx更擅长于静态资源的处理，性能更好，效率更高。<br>所以在实际应用中，我们将静态资源比如图片、css、html、js等交给nginx处理，而不是由tomcat处理。</p>
+<h3 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h3><p>在nginx.conf的location中配置静态资源的后缀</p>
+<p>例如：当访问静态资源，则从linux服务器/opt/static目录下获取（举例）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*\.(js|css|htm|html|gif|jpg|jpeg|png|bmp|swf|ioc|rar|zip|txt|flv|mid|doc|ppt|pdf|xls|mp3|wma)$ &#123;</span><br><span class="line">    root /opt/static;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">说明：</span><br><span class="line">~ 表示正则匹配，也就是说后面的内容可以是正则表达式匹配</span><br><span class="line">第一个点 . 表示任意字符</span><br><span class="line">*表示一个或多个字符</span><br><span class="line">\. 是转移字符，是后面这个点的转移字符</span><br><span class="line">| 表示或者</span><br><span class="line">$ 表示结尾</span><br></pre></td></tr></table></figure>
+
+<p>整个配置表示以 .后面括号里面的这些后缀结尾的文件都由nginx处理<br>放置静态资源的目录，要注意一下目录权限问题，如果权限不足，给目录赋予权限；<br>否则会出现403错误 chmod 755    </p>
+<h3 id="方式二"><a href="#方式二" class="headerlink" title="方式二"></a>方式二</h3><p>在nginx.conf的location中配置静态资源所在目录实现</p>
+<p>例如：当访问静态资源，则从linux服务器/opt/static目录下获取（举例）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*/(css|js|img|image) &#123;</span><br><span class="line">    root   /opt/static;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们将静态资源放入 /opt/static 目录下，然后用户访问时由nginx返回这些静态资源</p>
+<h2 id="动静分离"><a href="#动静分离" class="headerlink" title="动静分离"></a>动静分离</h2><p>Nginx的负载均衡和静态代理结合在一起，我们可以实现动静分离，这是实际应用中常见的一种场景。<br>动态资源，如jsp由tomcat或其他web服务器完成<br>静态资源，如图片、css、js等由nginx服务器完成<br>它们各司其职，专注于做自己擅长的事情<br>动静分离充分利用了它们各自的优势，从而达到更高效合理的架构</p>
+<h2 id="虚拟主机"><a href="#虚拟主机" class="headerlink" title="虚拟主机"></a>虚拟主机</h2><p>虚拟主机，就是把一台物理服务器划分成多个“虚拟”的服务器，这样我们的一台物理服务器就可以当做多个服务器来使用，从而可以配置多个网站。<br>Nginx提供虚拟主机的功能，就是为了让我们不需要安装多个Nginx，就可以运行多个域名不同的网站。<br>Nginx下，一个server标签就是一个虚拟主机。nginx的虚拟主机就是通过nginx.conf中server节点指定的，想要设置多个虚拟主机，配置多个server节点即可；<br>例如：<a target="_blank" rel="noopener" href="http://www.meituan.com/">www.meituan.com</a> 切换城市，可以看到不同的城市地址不一样（二级域名）<br>比如一个公司有多个二级域名，没有必要为每个二级域名都提供一台Nginx服务器，就可以使用虚拟主机技术，在一台nginx服务器上，模拟多个虚拟服务器。</p>
+<h3 id="基于端口的虚拟主机"><a href="#基于端口的虚拟主机" class="headerlink" title="基于端口的虚拟主机"></a>基于端口的虚拟主机</h3><p>基于端口的虚拟主机配置，使用端口来区分<br>浏览器使用 同一个域名+端口 或 同一个ip地址+端口访问；</p>
+<h3 id="基于域名的虚拟主机"><a href="#基于域名的虚拟主机" class="headerlink" title="基于域名的虚拟主机"></a>基于域名的虚拟主机</h3><p>基于域名的虚拟主机是最常见的一种虚拟主机</p>
+<p>域名解析也需要设置，这里不多赘述</p>
+<p><strong>说明：</strong><br>9100、9200、9300端口是tomcat服务<br>nginx一直监听80端口<br>如果用户访问<code>http://beijing.pengyirui.spac</code>时，会转跳到以<code>beijing.myweb.com</code>为名的tomcat服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">upstream beijing.myweb.com &#123;</span><br><span class="line">    server  127.0.0.1:9100;</span><br><span class="line">&#125;</span><br><span class="line">upstream nanjing.myweb.com &#123;</span><br><span class="line">    server  127.0.0.1:9200;</span><br><span class="line">&#125;</span><br><span class="line">upstream tianjin.myweb.com &#123;</span><br><span class="line">    server  127.0.0.1:9300;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  beijing.pengyirui.space;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://beijing.myweb.com;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  nanjing.pengyirui.space;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://nanjing.myweb.com;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  tianjin.pengyirui.space;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://tianjin.myweb.com;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="nginx配置中文详解"><a href="#nginx配置中文详解" class="headerlink" title="nginx配置中文详解"></a>nginx配置中文详解</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br></pre></td><td class="code"><pre><span class="line">#配置worker进程运行用户 nobody也是一个linux用户，一般用于启动程序，没有密码</span><br><span class="line">user  nobody;  </span><br><span class="line">#配置工作进程数目，根据硬件调整，通常等于CPU数量或者2倍于CPU数量</span><br><span class="line">worker_processes  1;  </span><br><span class="line"></span><br><span class="line">#配置全局错误日志及类型，[debug | info | notice | warn | error | crit]，默认是error</span><br><span class="line">error_log  logs/error.log;  </span><br><span class="line">#error_log  logs/error.log  notice;</span><br><span class="line">#error_log  logs/error.log  info;</span><br><span class="line"></span><br><span class="line">pid        logs/nginx.pid;  #配置进程pid文件 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">###====================================================</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#配置工作模式和连接数</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;  #配置每个worker进程连接数上限，nginx支持的总连接数就等于worker_processes * worker_connections</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">###===================================================</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#配置http服务器,利用它的反向代理功能提供负载均衡支持</span><br><span class="line">http &#123;</span><br><span class="line">    #配置nginx支持哪些多媒体类型，可以在conf/mime.types查看支持哪些多媒体类型</span><br><span class="line">    include       mime.types;  </span><br><span class="line">    #默认文件类型 流类型，可以理解为支持任意类型</span><br><span class="line">    default_type  application/octet-stream;  </span><br><span class="line">    #配置日志格式 </span><br><span class="line">    #log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="line">    #                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="line">    #                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><span class="line"></span><br><span class="line">    #配置access.log日志及存放路径，并使用上面定义的main日志格式</span><br><span class="line">    #access_log  logs/access.log  main;</span><br><span class="line"></span><br><span class="line">    sendfile        on;  #开启高效文件传输模式</span><br><span class="line">    #tcp_nopush     on;  #防止网络阻塞</span><br><span class="line"></span><br><span class="line">    #keepalive_timeout  0;</span><br><span class="line">    keepalive_timeout  65;  #长连接超时时间，单位是秒</span><br><span class="line"></span><br><span class="line">    #gzip  on;  #开启gzip压缩输出</span><br><span class="line">	</span><br><span class="line">	###-----------------------------------------------</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">    #配置虚拟主机</span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;  #配置监听端口</span><br><span class="line">        server_name  localhost;  #配置服务名</span><br><span class="line"></span><br><span class="line">        #charset koi8-r;  #配置字符集</span><br><span class="line"></span><br><span class="line">        #access_log  logs/host.access.log  main;  #配置本虚拟主机的访问日志</span><br><span class="line"></span><br><span class="line">	#默认的匹配斜杠/的请求，当访问路径中有斜杠/，会被该location匹配到并进行处理</span><br><span class="line">        location / &#123;</span><br><span class="line">	    #root是配置服务器的默认网站根目录位置，默认为nginx安装主目录下的html目录</span><br><span class="line">            root   html;  </span><br><span class="line">	    #配置首页文件的名称</span><br><span class="line">            index  index.html index.htm;  </span><br><span class="line">        &#125;		</span><br><span class="line"></span><br><span class="line">        #error_page  404              /404.html;  #配置404页面</span><br><span class="line">        # redirect server error pages to the static page /50x.html</span><br><span class="line">        #error_page   500 502 503 504  /50x.html;  #配置50x错误页面</span><br><span class="line">        </span><br><span class="line">	#精确匹配</span><br><span class="line">	location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">		#PHP 脚本请求全部转发到Apache处理</span><br><span class="line">        # proxy the PHP scripts to Apache listening on 127.0.0.1:80</span><br><span class="line">        #</span><br><span class="line">        #location ~ \.php$ &#123;</span><br><span class="line">        #    proxy_pass   http://127.0.0.1;</span><br><span class="line">        #&#125;</span><br><span class="line"></span><br><span class="line">		#PHP 脚本请求全部转发到FastCGI处理</span><br><span class="line">        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span><br><span class="line">        #</span><br><span class="line">        #location ~ \.php$ &#123;</span><br><span class="line">        #    root           html;</span><br><span class="line">        #    fastcgi_pass   127.0.0.1:9000;</span><br><span class="line">        #    fastcgi_index  index.php;</span><br><span class="line">        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span><br><span class="line">        #    include        fastcgi_params;</span><br><span class="line">        #&#125;</span><br><span class="line"></span><br><span class="line">		#禁止访问 .htaccess 文件</span><br><span class="line">        # deny access to .htaccess files, if Apache&#x27;s document root</span><br><span class="line">        # concurs with nginx&#x27;s one</span><br><span class="line">        #</span><br><span class="line">        #location ~ /\.ht &#123;</span><br><span class="line">        #    deny  all;</span><br><span class="line">        #&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	#配置另一个虚拟主机</span><br><span class="line">    # another virtual host using mix of IP-, name-, and port-based configuration</span><br><span class="line">    #</span><br><span class="line">    #server &#123;</span><br><span class="line">    #    listen       8000;</span><br><span class="line">    #    listen       somename:8080;</span><br><span class="line">    #    server_name  somename  alias  another.alias;</span><br><span class="line"></span><br><span class="line">    #    location / &#123;</span><br><span class="line">    #        root   html;</span><br><span class="line">    #        index  index.html index.htm;</span><br><span class="line">    #    &#125;</span><br><span class="line">    #&#125;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	#配置https服务，安全的网络传输协议，加密传输，端口443，运维来配置</span><br><span class="line">	#</span><br><span class="line">    # HTTPS server</span><br><span class="line">    #</span><br><span class="line">    #server &#123;</span><br><span class="line">    #    listen       443 ssl;</span><br><span class="line">    #    server_name  localhost;</span><br><span class="line"></span><br><span class="line">    #    ssl_certificate      cert.pem;</span><br><span class="line">    #    ssl_certificate_key  cert.key;</span><br><span class="line"></span><br><span class="line">    #    ssl_session_cache    shared:SSL:1m;</span><br><span class="line">    #    ssl_session_timeout  5m;</span><br><span class="line"></span><br><span class="line">    #    ssl_ciphers  HIGH:!aNULL:!MD5;</span><br><span class="line">    #    ssl_prefer_server_ciphers  on;</span><br><span class="line"></span><br><span class="line">    #    location / &#123;</span><br><span class="line">    #        root   html;</span><br><span class="line">    #        index  index.html index.htm;</span><br><span class="line">    #    &#125;</span><br><span class="line">    #&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://pengyirui.github.io">葫芦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://pengyirui.github.io/posts/248b.html">https://pengyirui.github.io/posts/248b.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://pengyirui.github.io" target="_blank">食葫芦的葫芦娃</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/java/">java</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-12-26-0.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/83ac.html"><img class="prev-cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-12-27-0.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">RabbitMQ</div></div></a></div><div class="next-post pull-right"><a href="/posts/2a19.html"><img class="next-cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-12-05-55.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SpringBoot</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/3b8.html" title="设计模式"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_3.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-19</div><div class="title">设计模式</div></div></a></div><div><a href="/posts/d973.html" title="Dubbo"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-12-05-51.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-13</div><div class="title">Dubbo</div></div></a></div><div><a href="/posts/5c27.html" title="JDBC"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-09-08-00.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-08</div><div class="title">JDBC</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">葫芦</div><div class="author-info__description">记录互联网上的点点滴滴</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/pengyirui"><i class="fab fa-github"></i><span>并没有开源项目的GitHub</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://raw.githubusercontent.com/pengyirui/blog_img/main/weixin.jpg" target="_blank" title="微信"><i class="iconfont icon-wechat"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=1224976993" target="_blank" title="QQ"><i class="iconfont icon-qq"></i></a><a class="social-icon" href="https://space.bilibili.com/8700057" target="_blank" title="哔哩哔哩"><i class="iconfont icon-bilibili-copy"></i></a><a class="social-icon" href="https://raw.githubusercontent.com/pengyirui/blog_img/main/coolapk_addme.png" target="_blank" title="酷安"><i class="iconfont icon-kuan"></i></a><a class="social-icon" href="https://music.163.com/#/user/home?id=293495280" target="_blank" title="网易云音乐"><i class="iconfont icon-wangyiyunyinle"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>自言自语</span></div><div class="announcement_content">倘若无法意识到无意识，它就会指挥你的生活，然后你称之为命运。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99%E9%83%A8%E7%BD%B2"><span class="toc-number">4.</span> <span class="toc-text">静态网站部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87ip%E7%9B%B4%E6%8E%A5%E8%AE%BF%E9%97%AE"><span class="toc-number">4.1.</span> <span class="toc-text">通过ip直接访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87ip-%E8%B7%AF%E5%BE%84%E8%AE%BF%E9%97%AE"><span class="toc-number">4.2.</span> <span class="toc-text">通过ip+路径访问</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-number">5.</span> <span class="toc-text">负载均衡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5"><span class="toc-number">6.</span> <span class="toc-text">常用负载均衡策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86"><span class="toc-number">7.</span> <span class="toc-text">静态代理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80"><span class="toc-number">7.1.</span> <span class="toc-text">方式一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C"><span class="toc-number">7.2.</span> <span class="toc-text">方式二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB"><span class="toc-number">8.</span> <span class="toc-text">动静分离</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA"><span class="toc-number">9.</span> <span class="toc-text">虚拟主机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%AB%AF%E5%8F%A3%E7%9A%84%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA"><span class="toc-number">9.1.</span> <span class="toc-text">基于端口的虚拟主机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%9F%9F%E5%90%8D%E7%9A%84%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA"><span class="toc-number">9.2.</span> <span class="toc-text">基于域名的虚拟主机</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E8%AF%A6%E8%A7%A3"><span class="toc-number">10.</span> <span class="toc-text">nginx配置中文详解</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/3b8.html" title="设计模式"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式"/></a><div class="content"><a class="title" href="/posts/3b8.html" title="设计模式">设计模式</a><time datetime="2023-01-19T02:49:02.000Z" title="发表于 2023-01-19 10:49:02">2023-01-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3b8.html" title="文章、教程记录"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_8.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文章、教程记录"/></a><div class="content"><a class="title" href="/posts/3b8.html" title="文章、教程记录">文章、教程记录</a><time datetime="2022-08-10T02:49:02.000Z" title="发表于 2022-08-10 10:49:02">2022-08-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1dft.html" title="java新特性"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-05-11-00.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java新特性"/></a><div class="content"><a class="title" href="/posts/1dft.html" title="java新特性">java新特性</a><time datetime="2022-07-27T02:00:02.000Z" title="发表于 2022-07-27 10:00:02">2022-07-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1df.html" title="博客搬家"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_6.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="博客搬家"/></a><div class="content"><a class="title" href="/posts/1df.html" title="博客搬家">博客搬家</a><time datetime="2022-07-24T02:00:02.000Z" title="发表于 2022-07-24 10:00:02">2022-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1dfc.html" title="给函数取一个好的名字"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_19.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="给函数取一个好的名字"/></a><div class="content"><a class="title" href="/posts/1dfc.html" title="给函数取一个好的名字">给函数取一个好的名字</a><time datetime="2022-01-01T02:00:02.000Z" title="发表于 2022-01-01 10:00:02">2022-01-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2023 By 葫芦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">-我可是有底线的-</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-silk-iota.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-silk-iota.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><center><script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1279698527'%3E%3C/span%3E%3Cscript src='https://s4.cnzz.com/z_stat.php%3Fid%3D1279698527%26online%3D2' type='text/javascript'%3E%3C/script%3E"));</script></center><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="122,115,116" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>OSPF路由协议 | 食葫芦的葫芦娃</title><meta name="keywords" content="数据通信"><meta name="author" content="葫芦"><meta name="copyright" content="葫芦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="基础部分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OSPF路由协议">
+<meta property="og:url" content="https://pengyirui.github.io/posts/3cf2.html">
+<meta property="og:site_name" content="食葫芦的葫芦娃">
+<meta property="og:description" content="基础部分">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_5.png">
+<meta property="article:published_time" content="2020-06-07T14:54:25.000Z">
+<meta property="article:modified_time" content="2022-07-27T07:16:15.357Z">
+<meta property="article:author" content="葫芦">
+<meta property="article:tag" content="数据通信">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_5.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://pengyirui.github.io/posts/3cf2"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 葫芦","link":"链接: ","source":"来源: 食葫芦的葫芦娃","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'OSPF路由协议',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-07-27 15:16:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/font_2170815_diyzt5u455i.css"><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">食葫芦的葫芦娃</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">OSPF路由协议</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-06-07T14:54:25.000Z" title="发表于 2020-06-07 22:54:25">2020-06-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-27T07:16:15.357Z" title="更新于 2022-07-27 15:16:15">2022-07-27</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>16分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="OSPF路由协议"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="OSPF概念"><a href="#OSPF概念" class="headerlink" title="OSPF概念"></a>OSPF概念</h2><p>本文章介绍TCP/IP路由协议之开放式最短路径优先协议（OSPF）的基本概念与基础配置。<br>OSPF是内部网关协议的一种，基于链路状态算法。</p>
+<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>支持无类域间路由（CIDR）：<br>OSPF是专门为TCP/IP环境开发的路由协议，支持无类域间路由（CIDR）和可变长子网掩码（VLSM）。</li>
+<li>无路由自环：<br>由于路由的计算是基于详细链路状态信息（网络拓扑信息）的，所采用的SPF算法本身不会产生环路，并且OSPF报文携带生成者的ID信息，因此OSPF计算的路由无自环。</li>
+<li>收敛速度快：<br>触发式更新，一旦拓扑结构发生变化，新的链路状态信息立刻泛洪，对拓扑变化敏感。</li>
+<li>使用IP组播收发协议数据：<br>OSPF路由器使用组播和单播收发协议数据，因此占用的网络资源很小。</li>
+<li>支持多条等值路由：<br>当到达目的地的等开销路径有多条时，流量被均衡地分担在这些等开销路径上。</li>
+<li>支持协议报文的认证：<br>OSPF路由器之间交换的所有报文都被验证。</li>
+</ul>
+<h3 id="链路状态算法的路由计算过程"><a href="#链路状态算法的路由计算过程" class="headerlink" title="链路状态算法的路由计算过程"></a>链路状态算法的路由计算过程</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-01.png"></p>
+<ul>
+<li><p>OSPF最显著的特点是使用链路状态算法，区别于早先的路由协议使用的距离矢量算法，因此，本文首先介绍链路状态算法的路由计算基本过程。</p>
+</li>
+<li><p>每个路由器通过泛洪链路状态通告（LSA）向外发布本地链路状态信息（例如使能OSPF的端口，可到达的邻居以及相邻的网段等等）。</p>
+</li>
+<li><p>每一个路由器通过收集其它路由器发布的链路状态通告以及自身生成的本地链路状态通告，形成一个链路状态数据库（LSDB）。LSDB描述了路由域内详细的网络拓扑结构。</p>
+</li>
+<li><p>所有路由器上的链路状态数据库是相同的。</p>
+</li>
+<li><p>通过LSDB，每台路由器计算一个以自己为根，以网络中其它节点为叶的最短路径树。</p>
+</li>
+<li><p>通过每台路由器计算的最短路径树得出了到网络中其它节点的路由表。</p>
+</li>
+<li><p>在OSPF中，有两个基本的概念需要介绍，一个是自治系统，或者说一个OSPF路由域；一个是Router ID。</p>
+</li>
+<li><p>在OSPF课程中，自治系统（Autonomous System）是指使用同一种路由协议交换路由信息的一组路由器，简称AS。</p>
+</li>
+<li><p>由于LSDB描述的是整个网络的拓扑结构，包括网络内所有的路由器，所以网络内每个路由器都需要有一个唯一的标识，用于在LSDB中标识自己。Router ID就是这样一个用于在自治系统中唯一标识一台运行OSPF的路由器的32位整数。每个运行OSPF的路由器都有一个Router ID。</p>
+</li>
+<li><p>Router ID的格式和IP地址的格式是一样的，推荐使用路由器Loopback0的IP地址做为路由器的Router ID。</p>
+</li>
+</ul>
+<h3 id="划分AS为多区域"><a href="#划分AS为多区域" class="headerlink" title="划分AS为多区域"></a>划分AS为多区域</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-02.png"></p>
+<ul>
+<li><p>区域是一组网段的集合。<br>OSPF支持将一组网段组合在一起，这样的一个组合称为一个区域，即区域是一组网段的集合。</p>
+</li>
+<li><p>划分区域可以缩小LSDB规模，减少网络流量。<br>区域内的详细拓扑信息不向其他区域发送，区域间传递的是抽象的路由信息，而不是详细的描述拓扑结构的链路状态信息。每个区域都有自己的LSDB，不同区域的LSDB是不同的。路由器会为每一个自己所连接到的区域维护一个单独的LSDB。由于详细链路状态信息不会被发布到区域以外，因此LSDB的规模大大缩小了。</p>
+</li>
+<li><p>Area 0为骨干区域，骨干区域负责在非骨干区域之间发布由区域边界路由器汇总的路由信息（并非详细的链路状态信息），为了避免区域间路由环路，非骨干区域之间不允许直接相互发布区域间路由信息。因此，所有区域边界路由器都至少有一个接口属于Area 0，即每个区域都必须连接到骨干区域。</p>
+</li>
+</ul>
+<h3 id="路由器分类"><a href="#路由器分类" class="headerlink" title="路由器分类"></a>路由器分类</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-03.png"></p>
+<ul>
+<li>内部路由器（Internal Router）：<br>内部路由器是指所有所连接的网段都在一个区域的路由器。属于同一个区域的IR维护相同的LSDB。</li>
+<li>区域边界路由器（Area Border Router）：<br>区域边界路由器是指连接到多个区域的路由器。ABR为每一个所连接的区域维护一个LSDB。</li>
+<li>骨干路由器（Backbone Router）：<br>骨干路由器是指至少有一个端口（或者虚连接）连接到骨干区域的路由器。包括所有的ABR和所有端口都在骨干区域的路由器。</li>
+<li>AS边界路由器（AS Boundary Router）：<br>AS边界路由器是指和其他AS中的路由器交换路由信息的路由器，这种路由器向整个AS通告AS外部路由信息。<br>AS边界路由器可以是内部路由器IR，或者是ABR，可以属于骨干区域也可以不属于骨干区域。</li>
+</ul>
+<h3 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h3><p>开启OSPF进程，创建OSPF区域，指定每个区域中所包含的网段。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[RTA]router id 1.1.1.1</span><br><span class="line">[RTA]ospf </span><br><span class="line">[RTA-ospf-1]area 1</span><br><span class="line">[RTA-ospf-1-area-0.0.0.1]network 1.1.1.1 0.0.0.0</span><br><span class="line">[RTA-ospf-1-area-0.0.0.1]network 10.1.1.0 0.0.0.255</span><br><span class="line"></span><br><span class="line">//查看路由表</span><br><span class="line">[RTA]display ip routing-table </span><br></pre></td></tr></table></figure>
+<h2 id="邻居与邻接的关系"><a href="#邻居与邻接的关系" class="headerlink" title="邻居与邻接的关系"></a>邻居与邻接的关系</h2><p>为了交换链路状态信息以及路由信息，OSPF路由器之间首先要建立邻接关系。</p>
+<h4 id="邻居（Neighbor）和邻接（Adjacency）"><a href="#邻居（Neighbor）和邻接（Adjacency）" class="headerlink" title="邻居（Neighbor）和邻接（Adjacency）"></a>邻居（Neighbor）和邻接（Adjacency）</h4><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-04.png"></p>
+<ul>
+<li><p>OSPF是一个动态路由协议，运行OSPF的路由器之间需要交换链路状态信息和路由信息，在交换这些信息之前首先需要建立邻接关系。</p>
+</li>
+<li><p>邻居路由器（Neighbor）：<br>有端口连接到同一个网段的两个路由器就是邻居路由器。<br>邻居关系由OSPF的Hello协议维护。</p>
+</li>
+<li><p>邻接（Adjacency）：<br>从邻居关系中选出的为了交换路由信息而形成的关系。</p>
+</li>
+<li><p>并非所有的邻居关系都可以成为邻接关系，不同的网络类型，是否建立邻接关系的规则也不同。</p>
+</li>
+</ul>
+<h3 id="OSPF支持的网络类型"><a href="#OSPF支持的网络类型" class="headerlink" title="OSPF支持的网络类型"></a>OSPF支持的网络类型</h3><blockquote>
+<p>OSPF定义了四种网络类型，分别是点到点网络，广播型网络，NBMA网络和点到多点网络。</p>
+</blockquote>
+<ul>
+<li><p>点到点网络是指只把两台路由器直接相连的网络。</p>
+<ul>
+<li>一个运行PPP的64K串行线路就是一个点到点网络的例子。</li>
+</ul>
+</li>
+<li><p>广播型网络是指支持两台以上路由器，并且具有广播能力的网络。</p>
+<ul>
+<li>一个含有四台路由器的以太网就是一个广播型网络的例子。</li>
+</ul>
+</li>
+<li><p>非广播多路访问（NBMA）：</p>
+<ul>
+<li>在NBMA网络上，OSPF模拟在广播型网络上的操作，但是每个路由器的邻居需要手动配置。</li>
+<li>NBMA方式要求网络中的路由器组成全连接。例如，使用SVC进行通信的ATM网络。</li>
+<li>非广播网络是指支持两台以上路由器互连，但是不具有广播能力的网络。</li>
+<li>在非广播网络上，OSPF有两种运行方式，非广播多路访问和点到多点。</li>
+</ul>
+</li>
+<li><p>点到多点：</p>
+<ul>
+<li>将整个非广播网络看成是一组点到点网络。每个路由器的邻居可以使用底层协议例如反向地址解析协议（Inverse ARP）来发现。</li>
+<li>对于不能组成全连接的网络应当使用点到多点方式，例如只使用PVC的不完全连接的帧中继网络。</li>
+</ul>
+</li>
+</ul>
+<h3 id="常见链路层协议对应的默认网络类型"><a href="#常见链路层协议对应的默认网络类型" class="headerlink" title="常见链路层协议对应的默认网络类型"></a>常见链路层协议对应的默认网络类型</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-05.png"></p>
+<h3 id="虚连接（Virtual-Link）"><a href="#虚连接（Virtual-Link）" class="headerlink" title="虚连接（Virtual Link）"></a>虚连接（Virtual Link）</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-06.png"></p>
+<ul>
+<li><p>骨干区域必须是连续的，但在物理上不连续的时候，可以使用虚连接使骨干区域在逻辑上连续。</p>
+</li>
+<li><p>虚连接可以在任意两个区域边界路由器上建立，但是要求这两个区域边界路由器都有端口连接到一个共同的非骨干区域。这个非骨干区域成为Transit区域。</p>
+</li>
+<li><p>如上图所示，RTB做为一个ABR没有物理连接到骨干区域，此时可以在RTA和RTB之间配置一条虚拟链路，使RTB连接到骨干区域。Area 1是此虚拟连接的Transit区域。</p>
+</li>
+<li><p>虚连接技术虽然理论上使骨干区域可以在物理上不连续，但在实际组网时是不推荐的。</p>
+</li>
+<li><p>虚连接是属于骨干区域（Area 0）的一条虚拟链路。</p>
+</li>
+</ul>
+<h3 id="端口状态变换"><a href="#端口状态变换" class="headerlink" title="端口状态变换"></a>端口状态变换</h3><p>有两种不同的情况</p>
+<h4 id="点到点、点到多点网段和虚连接"><a href="#点到点、点到多点网段和虚连接" class="headerlink" title="点到点、点到多点网段和虚连接"></a>点到点、点到多点网段和虚连接</h4><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-07.png"><br>各种状态的解释如下：</p>
+<ul>
+<li>Down：<br>这是端口的初始状态，在该状态下，底层协议显示该端口不可用，所有定时器被关闭。</li>
+<li>Loopback：<br>此状态表示端口被环回。在该状态下的端口被通告为一个Stub网段。</li>
+<li>Point-to-point（P-to-P）：<br>在此状态下，端口是可用的，而且端口是连接到点到点、点到多点或者虚连接，此状态下的端口试图与邻居建立邻接关系，并以HelloInterval的间隔发送Hello报文。</li>
+</ul>
+<p>各种事件解释如下：</p>
+<ul>
+<li>UnloopInd：<br>Unloopback Indication，表示端口解除环回状态。处于Loopback状态下的端口如果收到此事件，则进入Down状态。</li>
+<li>InterfaceUp：<br>端口的链路层协议变成可用状态，即常说的链路层Up。由于不需要选举DR和BDR，因此点到点、点到多点网段以及虚连接的端口状态变换比较</li>
+</ul>
+<h4 id="广播型网段和NBMA网段"><a href="#广播型网段和NBMA网段" class="headerlink" title="广播型网段和NBMA网段"></a>广播型网段和NBMA网段</h4><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-08.png"><br>相关状态和事件解释如下：</p>
+<ul>
+<li>Waiting：<br>在此状态下，路由器通过监听接收到的Hello报文检测网络中是否已经有DR和BDR。在此状态下的路由器不可以参与选举DR和BDR。</li>
+<li>Backup：<br>在此状态下，该路由器成为所连接网络上的BDR，并与网段中所有的其他路由器建立邻接关系。</li>
+<li>DR：<br>在此状态下，该路由器成为所连接网络上的DR，并与网段中所有的其他路由器建立邻接关系。</li>
+<li>DROther：<br>该路由器连接到一个广播型网段或者NBMA网段，而且该路由器不是一个DR或者BDR。此状态下的路由器与DR和BDR形成邻接关系并交换路由信息。</li>
+<li>BackupSeen：<br>路由器已经检测到网络上是否存在BDR。</li>
+</ul>
+<p>一个OSPF路由器在广播型网段和NBMA网段上选举DR和BDR之前，首先会等待一段时间（RouterDeadInterval），在这段时间里检测网络上是否已经存在DR和BDR，如果已经有DR和BDR，则不启动选举过程，直接进入DROther状态。因此，网络上Router Priority最大的路由器不一定是DR，Router Priority第二大的路由器也不一定是BDR。</p>
+<h3 id="DR和BDR"><a href="#DR和BDR" class="headerlink" title="DR和BDR"></a>DR和BDR</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-09.png"></p>
+<p>每一个含有至少两个路由器的广播型网络和NBMA网络都有一个指定路由器（Designated Router，DR）和备份指定路由器（Backup Designated Router，BDR）。</p>
+<p>DR和BDR的作用：</p>
+<ol>
+<li><p>减少邻接关系的数量，从而减少链路状态信息以及路由信息的交换次数，这样可以节省带宽，减少路由器硬件的负担。一个既不是DR也不是BDR的路由器只与DR和BDR形成邻接关系并交换链路状态信息以及路由信息，这样就大大减少了大型广播型网络和NBMA网络中的邻接关系数量。<br>本例中，虽然RTA有三个邻居，但是只形成两个邻接关系。</p>
+</li>
+<li><p>在描述拓扑的LSDB中，一个NBMA网段或者广播型网段是由单独一条LSA来描述的，这条LSA是由该网段上的DR产生的。</p>
+</li>
+</ol>
+<h3 id="选举DR和BDR"><a href="#选举DR和BDR" class="headerlink" title="选举DR和BDR"></a>选举DR和BDR</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-10.png"></p>
+<ul>
+<li><p>DR和BDR由OSPF的Hello协议选举，选举是根据端口的路由器优先级（Router Priority）进行的。</p>
+</li>
+<li><p>如果Router Priority被设置为0，那么该路由器将不允许被选举成DR或者BDR。</p>
+</li>
+<li><p>Router Priority越大越优先。如果相同，Router ID大者优先。 </p>
+</li>
+<li><p>但是为了维护网络上邻接关系的稳定性，如果网络中已经存在DR和BDR，则新添加进该网段的路由器不会成为DR和BDR，不管该路由器的Router Priority是否最大。</p>
+</li>
+<li><p>如果当前DR故障，当前BDR自动成为新的DR，网络中重新选举BDR；如果当前BDR故障，则DR不变，重新选举BDR。</p>
+</li>
+<li><p>这种选举机制的目的是为了保持邻接关系的稳定，减小拓扑结构的改变对邻接关系的影响。</p>
+</li>
+</ul>
+<h3 id="配置Router-Priority"><a href="#配置Router-Priority" class="headerlink" title="配置Router Priority"></a>配置Router Priority</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[RTB]interface Ethernet 0/0</span><br><span class="line">[RTB-Ethernet0/0]ospf dr-priority 100</span><br></pre></td></tr></table></figure>
+<ul>
+<li>ospf dr-priority value：修改端口的Router Priority。</li>
+<li>Router Priority的取值范围是0～255，默认值为1。</li>
+<li>如果两台路由器Router Priority值相同，则比较Router ID，Router ID大的更优先。</li>
+<li>如果修改了Router Priority，需要重启ospf进程才能重新参与选举DR和BDR。</li>
+</ul>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h4 id="NBMA网络"><a href="#NBMA网络" class="headerlink" title="NBMA网络"></a>NBMA网络</h4><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-11.png"><br>物理拓扑描述：</p>
+<blockquote>
+<p>三台路由器通过帧中继交换机组成全连接。把所有网段配置在Area 1中。<br>NBMA网络中不需要配置反向ARP，邻居需要手动指定。<br>在RTA上配置两个邻居，10.1.1.2和10.1.1.3。<br>指定邻居的时候使用该邻居在该网段上的IP地址来标识。<br>peer ip-address [ dr-priority dr-priority-number ]<br>dr-priority-number：邻居的Router Priority，默认为1。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[RTA]router id 1.1.1.1 </span><br><span class="line">[RTA]ospf </span><br><span class="line">[RTA-ospf-1]peer 10.1.1.2 </span><br><span class="line">[RTA-ospf-1]peer 10.1.1.3 </span><br><span class="line">[RTA-ospf-1]area 1</span><br><span class="line">[RTA-ospf-1-area-0.0.0.1]network 1.1.1.1 0.0.0.0 </span><br><span class="line">[RTA-ospf-1-area-0.0.0.1]network 10.1.1.0 0.0.0.255</span><br><span class="line">[RTA-ospf-1-area-0.0.0.1]return</span><br><span class="line">&lt;RTA&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[RTB]router id 2.2.2.2</span><br><span class="line">[RTB]ospf</span><br><span class="line">[RTB-ospf-1]peer 10.1.1.1</span><br><span class="line">[RTB-ospf-1]peer 10.1.1.3</span><br><span class="line">[RTB-ospf-1]area 1</span><br><span class="line">[RTB-ospf-1-area-0.0.0.1]network 2.2.2.2 0.0.0.0</span><br><span class="line">[RTB-ospf-1-area-0.0.0.1]network 10.1.1.0 0.0.0.255</span><br><span class="line">[RTB-ospf-1-area-0.0.0.1]return</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[RTC]router id 3.3.3.3</span><br><span class="line">[RTC]ospf </span><br><span class="line">[RTC-ospf-1]peer 10.1.1.1</span><br><span class="line">[RTC-ospf-1]peer 10.1.1.2</span><br><span class="line">[RTC-ospf-1]area 1</span><br><span class="line">[RTC-ospf-1-area-0.0.0.1]network 3.3.3.3 0.0.0.0</span><br><span class="line">[RTC-ospf-1-area-0.0.0.1]network 10.1.1.0 0.0.0.255</span><br><span class="line">[RTC-ospf-1-area-0.0.0.1]return</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//验证路由表</span><br><span class="line">[RTA]display ip routing-table </span><br><span class="line"></span><br><span class="line">//验证OSPF端口信息</span><br><span class="line">[RTA]display ospf interface Serial 1/0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>State: 端口状态。<br>Type: 该端口的OSPF网络类型。<br>Priority：该端口的Router Priority值，用于DR和BDR选举。<br>Designated Router: DR的端口IP地址。<br>Backup Designated Router: BDR的端口IP地址。</p>
+</blockquote>
+<h3 id="点到多点网络"><a href="#点到多点网络" class="headerlink" title="点到多点网络"></a>点到多点网络</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-12.png"></p>
+<blockquote>
+<p>本例中：<br>RTA可以连接到其它两台路由器，但是RTB和RTC之间没有连接。<br>由于网络中的路由器不是全连接的，所以帧中继端口的OSPF网络类型需要手动指定为点到多点。<br>帧中继的反向ARP需要在端口上开启。<br>在RTA上，把所有网段配置在Area 1中。<br>把Serial 1/0端口的网络类型手动修改成点到多点。<br>ospf network-type  broadcast | nbma | p2mp | p2p<br>OSPF共有四种网络类型。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[RTA]router id 1.1.1.1</span><br><span class="line">[RTA]ospf </span><br><span class="line">[RTA-ospf-1]area 1</span><br><span class="line">[RTA-ospf-1-area-0.0.0.1]network 1.1.1.1 0.0.0.0</span><br><span class="line">[RTA-ospf-1-area-0.0.0.1]network 10.1.1.0 0.0.0.255</span><br><span class="line">[RTA]interface Serial 1/0</span><br><span class="line">[RTA-Serial1/0]ospf network-type p2mp</span><br><span class="line">[RTA-Serial1/0]return</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[RTB]router id 2.2.2.2</span><br><span class="line">[RTB]ospf </span><br><span class="line">[RTB-ospf-1]area 1</span><br><span class="line">[RTB-ospf-1-area-0.0.0.1]network 2.2.2.2 0.0.0.0</span><br><span class="line">[RTB-ospf-1-area-0.0.0.1]network 10.1.1.0 0.0.0.255</span><br><span class="line">[RTB]interface Serial 1/0</span><br><span class="line">[RTB-Serial1/0]ospf network-type p2mp </span><br><span class="line">[RTB-Serial1/0]return</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[RTC]router id 3.3.3.3</span><br><span class="line">[RTC]ospf </span><br><span class="line">[RTC-ospf-1]area 1</span><br><span class="line">[RTC-ospf-1-area-0.0.0.1]network 3.3.3.3 0.0.0.0</span><br><span class="line">[RTC-ospf-1-area-0.0.0.1]network 10.1.1.0 0.0.0.255</span><br><span class="line">[RTC]interface Serial 1/0</span><br><span class="line">[RTC-Serial1/0]ospf network-type p2mp </span><br><span class="line">[RTC-Serial1/0]return</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//验证路由表</span><br><span class="line">[RTA]display ip routing-table </span><br><span class="line"></span><br><span class="line">//验证OSPF端口信息</span><br><span class="line">[RTA]display ospf interface Serial 1/0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>OSPF网络类型为点到多点，点到多点网络类型的端口的端口稳定状态是Point-to-Point。</p>
+</blockquote>
+<h3 id="虚连接"><a href="#虚连接" class="headerlink" title="虚连接"></a>虚连接</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-07-13.png"></p>
+<blockquote>
+<p>本例中：<br>RTC是ABR，但是RTC没有连接到骨干区域。因此在RTB和RTC之间配置虚连接。Area 1是该虚连接的Transit区域。在RTA上，把所有网段配置在Area 0中。</p>
+</blockquote>
+<blockquote>
+<p>配置虚连接时，需要指定虚连接对端的Router ID。<br>虚连接在transit区域的区域视图下配置。<br>vlink-peer router-id ：配置虚拟连接时，使用对端Router ID表示对端路由器。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[RTB]router id 2.2.2.2</span><br><span class="line">[RTB]ospf </span><br><span class="line">[RTB-ospf-1]area 0 </span><br><span class="line">[RTB-ospf-1-area-0.0.0.0]network 2.2.2.2 0.0.0.0</span><br><span class="line">[RTB-ospf-1-area-0.0.0.0]network 10.1.1.0 0.0.0.255</span><br><span class="line">[RTB-ospf-1]area 1</span><br><span class="line">[RTB-ospf-1-area-0.0.0.1]network 10.1.2.0 0.0.0.255</span><br><span class="line">[RTB-ospf-1-area-0.0.0.1]vlink-peer 3.3.3.3 </span><br><span class="line">[RTB-ospf-1-area-0.0.0.1]return</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[RTC]router id 3.3.3.3</span><br><span class="line">[RTC]ospf </span><br><span class="line">[RTC-ospf-1]area 1</span><br><span class="line">[RTC-ospf-1-area-0.0.0.1]network 10.1.2.0 0.0.0.255</span><br><span class="line">[RTC-ospf-1-area-0.0.0.1]vlink-peer 2.2.2.2</span><br><span class="line">[RTC-ospf-1]area 2</span><br><span class="line">[RTC-ospf-1-area-0.0.0.2]network 3.3.3.3 0.0.0.0</span><br><span class="line">[RTC-ospf-1-area-0.0.0.2]network 10.1.3.0 0.0.0.255</span><br><span class="line">[RTC-ospf-1-area-0.0.0.2]return</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//验证路由表</span><br><span class="line">[RTA]display ip routing-table </span><br><span class="line"></span><br><span class="line">//验证OSPF端口信息</span><br><span class="line">[RTC]display ospf vlink </span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Neighbor-id:<br>虚连接邻居的Router ID。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://pengyirui.github.io">葫芦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://pengyirui.github.io/posts/3cf2.html">https://pengyirui.github.io/posts/3cf2.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://pengyirui.github.io" target="_blank">食葫芦的葫芦娃</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1/">数据通信</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_5.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/db54.html"><img class="prev-cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-06-25-00.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Docker的概念与安装</div></div></a></div><div class="next-post pull-right"><a href="/posts/9c80.html"><img class="next-cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_19.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">IP地址规划</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/9c80.html" title="IP地址规划"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_19.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-06</div><div class="title">IP地址规划</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">葫芦</div><div class="author-info__description">记录互联网上的点点滴滴</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/pengyirui"><i class="fab fa-github"></i><span>并没有开源项目的GitHub</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://raw.githubusercontent.com/pengyirui/blog_img/main/weixin.jpg" target="_blank" title="微信"><i class="iconfont icon-wechat"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=1224976993" target="_blank" title="QQ"><i class="iconfont icon-qq"></i></a><a class="social-icon" href="https://space.bilibili.com/8700057" target="_blank" title="哔哩哔哩"><i class="iconfont icon-bilibili-copy"></i></a><a class="social-icon" href="https://raw.githubusercontent.com/pengyirui/blog_img/main/coolapk_addme.png" target="_blank" title="酷安"><i class="iconfont icon-kuan"></i></a><a class="social-icon" href="https://music.163.com/#/user/home?id=293495280" target="_blank" title="网易云音乐"><i class="iconfont icon-wangyiyunyinle"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>自言自语</span></div><div class="announcement_content">倘若无法意识到无意识，它就会指挥你的生活，然后你称之为命运。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#OSPF%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">OSPF概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-number">1.0.1.</span> <span class="toc-text">特点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E7%8A%B6%E6%80%81%E7%AE%97%E6%B3%95%E7%9A%84%E8%B7%AF%E7%94%B1%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">链路状态算法的路由计算过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%92%E5%88%86AS%E4%B8%BA%E5%A4%9A%E5%8C%BA%E5%9F%9F"><span class="toc-number">1.2.</span> <span class="toc-text">划分AS为多区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8%E5%88%86%E7%B1%BB"><span class="toc-number">1.3.</span> <span class="toc-text">路由器分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.</span> <span class="toc-text">基本配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%BB%E5%B1%85%E4%B8%8E%E9%82%BB%E6%8E%A5%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">2.</span> <span class="toc-text">邻居与邻接的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%82%BB%E5%B1%85%EF%BC%88Neighbor%EF%BC%89%E5%92%8C%E9%82%BB%E6%8E%A5%EF%BC%88Adjacency%EF%BC%89"><span class="toc-number">2.0.1.</span> <span class="toc-text">邻居（Neighbor）和邻接（Adjacency）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OSPF%E6%94%AF%E6%8C%81%E7%9A%84%E7%BD%91%E7%BB%9C%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.1.</span> <span class="toc-text">OSPF支持的网络类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%93%BE%E8%B7%AF%E5%B1%82%E5%8D%8F%E8%AE%AE%E5%AF%B9%E5%BA%94%E7%9A%84%E9%BB%98%E8%AE%A4%E7%BD%91%E7%BB%9C%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.2.</span> <span class="toc-text">常见链路层协议对应的默认网络类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E8%BF%9E%E6%8E%A5%EF%BC%88Virtual-Link%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">虚连接（Virtual Link）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E7%8A%B6%E6%80%81%E5%8F%98%E6%8D%A2"><span class="toc-number">2.4.</span> <span class="toc-text">端口状态变换</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%82%B9%E5%88%B0%E7%82%B9%E3%80%81%E7%82%B9%E5%88%B0%E5%A4%9A%E7%82%B9%E7%BD%91%E6%AE%B5%E5%92%8C%E8%99%9A%E8%BF%9E%E6%8E%A5"><span class="toc-number">2.4.1.</span> <span class="toc-text">点到点、点到多点网段和虚连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%BF%E6%92%AD%E5%9E%8B%E7%BD%91%E6%AE%B5%E5%92%8CNBMA%E7%BD%91%E6%AE%B5"><span class="toc-number">2.4.2.</span> <span class="toc-text">广播型网段和NBMA网段</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DR%E5%92%8CBDR"><span class="toc-number">2.5.</span> <span class="toc-text">DR和BDR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BEDR%E5%92%8CBDR"><span class="toc-number">2.6.</span> <span class="toc-text">选举DR和BDR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AERouter-Priority"><span class="toc-number">2.7.</span> <span class="toc-text">配置Router Priority</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#NBMA%E7%BD%91%E7%BB%9C"><span class="toc-number">3.0.1.</span> <span class="toc-text">NBMA网络</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%82%B9%E5%88%B0%E5%A4%9A%E7%82%B9%E7%BD%91%E7%BB%9C"><span class="toc-number">3.1.</span> <span class="toc-text">点到多点网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E8%BF%9E%E6%8E%A5"><span class="toc-number">3.2.</span> <span class="toc-text">虚连接</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/3b8.html" title="设计模式"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式"/></a><div class="content"><a class="title" href="/posts/3b8.html" title="设计模式">设计模式</a><time datetime="2023-01-19T02:49:02.000Z" title="发表于 2023-01-19 10:49:02">2023-01-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3b8.html" title="文章、教程记录"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_8.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文章、教程记录"/></a><div class="content"><a class="title" href="/posts/3b8.html" title="文章、教程记录">文章、教程记录</a><time datetime="2022-08-10T02:49:02.000Z" title="发表于 2022-08-10 10:49:02">2022-08-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1dft.html" title="java新特性"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-05-11-00.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java新特性"/></a><div class="content"><a class="title" href="/posts/1dft.html" title="java新特性">java新特性</a><time datetime="2022-07-27T02:00:02.000Z" title="发表于 2022-07-27 10:00:02">2022-07-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1df.html" title="博客搬家"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_6.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="博客搬家"/></a><div class="content"><a class="title" href="/posts/1df.html" title="博客搬家">博客搬家</a><time datetime="2022-07-24T02:00:02.000Z" title="发表于 2022-07-24 10:00:02">2022-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1dfc.html" title="给函数取一个好的名字"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_19.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="给函数取一个好的名字"/></a><div class="content"><a class="title" href="/posts/1dfc.html" title="给函数取一个好的名字">给函数取一个好的名字</a><time datetime="2022-01-01T02:00:02.000Z" title="发表于 2022-01-01 10:00:02">2022-01-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2023 By 葫芦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">-我可是有底线的-</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-silk-iota.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-silk-iota.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><center><script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1279698527'%3E%3C/span%3E%3Cscript src='https://s4.cnzz.com/z_stat.php%3Fid%3D1279698527%26online%3D2' type='text/javascript'%3E%3C/script%3E"));</script></center><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="122,115,116" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

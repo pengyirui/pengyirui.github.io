@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>三剑客之grep、sed、awk | 食葫芦的葫芦娃</title><meta name="keywords" content="Linux,shell"><meta name="author" content="葫芦"><meta name="copyright" content="葫芦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="awk是真的难学，用cut代替着先。。。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三剑客之grep、sed、awk">
+<meta property="og:url" content="https://pengyirui.github.io/posts/8421.html">
+<meta property="og:site_name" content="食葫芦的葫芦娃">
+<meta property="og:description" content="awk是真的难学，用cut代替着先。。。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_6.png">
+<meta property="article:published_time" content="2020-08-28T14:54:25.000Z">
+<meta property="article:modified_time" content="2022-07-27T07:16:15.362Z">
+<meta property="article:author" content="葫芦">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_6.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://pengyirui.github.io/posts/8421"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 葫芦","link":"链接: ","source":"来源: 食葫芦的葫芦娃","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '三剑客之grep、sed、awk',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-07-27 15:16:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/font_2170815_diyzt5u455i.css"><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">食葫芦的葫芦娃</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">三剑客之grep、sed、awk</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-08-28T14:54:25.000Z" title="发表于 2020-08-28 22:54:25">2020-08-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-27T07:16:15.362Z" title="更新于 2022-07-27 15:16:15">2022-07-27</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="三剑客之grep、sed、awk"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="grep工具"><a href="#grep工具" class="headerlink" title="grep工具"></a>grep工具</h2><blockquote>
+<p>grep是<strong>行</strong>过滤工具；用于根据关键字进行行过滤</p>
+</blockquote>
+<p><strong>语法：</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># grep [选项] &#x27;关键字&#x27; 文件名</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>常见选项：</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">OPTIONS:</span><br><span class="line">    <span class="literal">-i</span>: 不区分大小写</span><br><span class="line">    <span class="literal">-v</span>: 查找不包含指定内容的行,反向选择</span><br><span class="line">    <span class="literal">-w</span>: 按单词搜索</span><br><span class="line">    <span class="literal">-o</span>: 打印匹配关键字</span><br><span class="line">    <span class="literal">-c</span>: 统计匹配到的行数</span><br><span class="line">    <span class="literal">-n</span>: 显示行号</span><br><span class="line">    <span class="literal">-r</span>: 逐层遍历目录查找</span><br><span class="line">    <span class="literal">-A</span>: 显示匹配行及后面多少行    </span><br><span class="line">    <span class="literal">-B</span>: 显示匹配行及前面多少行</span><br><span class="line">    <span class="literal">-C</span>: 显示匹配行前后多少行</span><br><span class="line">    <span class="literal">-l</span>：只列出匹配的文件名</span><br><span class="line">    <span class="literal">-L</span>：列出不匹配的文件名</span><br><span class="line">    <span class="literal">-e</span>: 使用正则匹配</span><br><span class="line">    <span class="literal">-E</span>:使用扩展正则匹配</span><br><span class="line">    ^key:以关键字开头</span><br><span class="line">    key<span class="variable">$</span>:以关键字结尾</span><br><span class="line">    ^<span class="variable">$</span>:匹配空行</span><br><span class="line">    <span class="literal">--color</span>=auto ：可以将找到的关键词部分加上颜色的显示</span><br></pre></td></tr></table></figure>
+
+<p><strong>颜色显示（别名设置）：</strong></p>
+<blockquote>
+<p>centos 7 之后都默认自带的</p>
+</blockquote>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">临时设置：</span><br><span class="line"><span class="comment"># alias grep=&#x27;grep --color=auto&#x27;            //只针对当前终端和当前用户生效</span></span><br><span class="line">永久设置：</span><br><span class="line"><span class="number">1</span>）全局（针对所有用户生效）</span><br><span class="line">vim /etc/bashrc</span><br><span class="line">alias grep=<span class="string">&#x27;grep --color=auto&#x27;</span></span><br><span class="line">source /etc/bashrc</span><br><span class="line"><span class="number">2</span>）局部（针对具体的某个用户）</span><br><span class="line">vim ~/.bashrc</span><br><span class="line">alias grep=<span class="string">&#x27;grep --color=auto&#x27;</span></span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<p><strong>举例说明：</strong><br>说明：不要直接使用/etc/passwd文件，将其拷贝到/tmp下做实验！</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># grep -i root passwd                        忽略大小写匹配包含root的行</span></span><br><span class="line"><span class="comment"># grep -w ftp passwd                         精确匹配ftp单词</span></span><br><span class="line"><span class="comment"># grep -w hello passwd                         精确匹配hello单词;自己添加包含hello的行到文件</span></span><br><span class="line"><span class="comment"># grep -wo ftp passwd                         打印匹配到的关键字ftp</span></span><br><span class="line"><span class="comment"># grep -n root passwd                         打印匹配到root关键字的行好</span></span><br><span class="line"><span class="comment"># grep -ni root passwd                         忽略大小写匹配统计包含关键字root的行</span></span><br><span class="line"><span class="comment"># grep -nic root passwd                        忽略大小写匹配统计包含关键字root的行数</span></span><br><span class="line"><span class="comment"># grep -i ^root passwd                         忽略大小写匹配以root开头的行</span></span><br><span class="line"><span class="comment"># grep bash$ passwd                             匹配以bash结尾的行</span></span><br><span class="line"><span class="comment"># grep -n ^$ passwd                             匹配空行并打印行号</span></span><br><span class="line"><span class="comment"># grep ^# /etc/vsftpd/vsftpd.conf        匹配以#号开头的行</span></span><br><span class="line"><span class="comment"># grep -v ^# /etc/vsftpd/vsftpd.conf    匹配不以#号开头的行</span></span><br><span class="line"><span class="comment"># grep -A 5 mail passwd                     匹配包含mail关键字及其后5行</span></span><br><span class="line"><span class="comment"># grep -B 5 mail passwd                     匹配包含mail关键字及其前5行</span></span><br><span class="line"><span class="comment"># grep -C 5 mail passwd                     匹配包含mail关键字及其前后5行</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="sed工具"><a href="#sed工具" class="headerlink" title="sed工具"></a>sed工具</h2><blockquote>
+<p>其主要功能为对文件进行修改处理，可以对文件或标准输入数据流进行增删改查等操作，尤其适用于大文件或有规律的文件</p>
+</blockquote>
+<p>适用场景</p>
+<ul>
+<li>超大文件处理；</li>
+<li>有规律的文本，例如格式化后的日志文件等；</li>
+<li>对文件进行批量增加，替换等。</li>
+</ul>
+<p>语法：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed 选项 <span class="string">&quot;地址界定 命令&quot;</span> 处理的文件</span><br></pre></td></tr></table></figure>
+
+<p>例子:<br>生成1到50的行的文件</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seq <span class="number">50</span>  &gt; test</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>查询</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">显示3和11行</span><br><span class="line">[root@localhost test]# sed  -n &#x27;3p;11p&#x27; test</span><br><span class="line">显示3到11行</span><br><span class="line">[root@localhost test]# sed  -n &#x27;3,11p&#x27; test</span><br><span class="line">显示最后一行（使用正则表达式）</span><br><span class="line">[root@localhost test]# sed  -n &#x27;$p&#x27; test</span><br></pre></td></tr></table></figure></li>
+<li><p>删除</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">全部删除</span><br><span class="line">[root@localhost test]# sed &#x27;d&#x27; test</span><br><span class="line">删除最后一行</span><br><span class="line">[root@localhost test]# sed &#x27;$d&#x27; test</span><br></pre></td></tr></table></figure></li>
+<li><p>插入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">第10行上面插入xxxx     （i可以理解成infor）</span><br><span class="line">[root@localhost test]# sed &#x27;10i xxxx&#x27; test</span><br><span class="line"></span><br><span class="line">第10行下面插入xxxx     （a可以理解成after）</span><br><span class="line">[root@localhost test]# sed &#x27;10a xxxx&#x27; test</span><br><span class="line"></span><br><span class="line">10到最后一行下面插入xxxx     （a可以理解成after  这里用到了正则）</span><br><span class="line">[root@localhost test]# sed &#x27;10,$a xxxx&#x27; test</span><br><span class="line"></span><br><span class="line">把第10行的10，改成xxxxx     （10s代表第用两个井号隔开）</span><br><span class="line">[root@localhost test]# sed &#x27;10s#10#xxxxx#&#x27; test</span><br><span class="line"></span><br><span class="line">5到10行行末尾插入xxxxx</span><br><span class="line">[root@localhost test]# sed &#x27;5，10s#$#xxxxx#&#x27; test</span><br><span class="line"></span><br><span class="line">提示！</span><br><span class="line">`-i.bak`先备份后执行，会多出一个文件xxx.bak</span><br><span class="line">[root@localhost test]# sed -i.bak &#x27;$d&#x27; test</span><br></pre></td></tr></table></figure></li>
+<li><p>sed的反向引用<br>例子：批量重命名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">生成文件，目的将生成的文件改成hello_+数字.log</span><br><span class="line">[root@localhost mv]# touch hello_&#123;10010..10030&#125;_world.log</span><br><span class="line"></span><br><span class="line">测试：</span><br><span class="line">[root@localhost mv]# find . -type f -name &#x27;*.log&#x27; | sed -r &#x27;s#^(.*)_world(.*)#mv \0 \1\2#&#x27;</span><br><span class="line"></span><br><span class="line">解释：find：寻找文件名包含log的文件，sed用正则匹配语句\0代表完整的名称，\1\2代表两个括号匹配的内容。</span><br><span class="line"></span><br><span class="line">mv ./hello_10010_world.log ./hello_10010.log</span><br><span class="line">mv ./hello_10011_world.log ./hello_10011.log</span><br><span class="line">mv ./hello_10012_world.log ./hello_10012.log</span><br><span class="line">mv ./hello_10013_world.log ./hello_10013.log</span><br><span class="line">mv ./hello_10014_world.log ./hello_10014.log</span><br><span class="line">mv ./hello_10015_world.log ./hello_10015.log</span><br><span class="line">mv ./hello_10016_world.log ./hello_10016.log</span><br><span class="line">mv ./hello_10017_world.log ./hello_10017.log</span><br><span class="line">mv ./hello_10018_world.log ./hello_10018.log</span><br><span class="line">mv ./hello_10019_world.log ./hello_10019.log</span><br><span class="line">mv ./hello_10020_world.log ./hello_10020.log</span><br><span class="line">mv ./hello_10021_world.log ./hello_10021.log</span><br><span class="line">mv ./hello_10022_world.log ./hello_10022.log</span><br><span class="line">mv ./hello_10023_world.log ./hello_10023.log</span><br><span class="line">mv ./hello_10024_world.log ./hello_10024.log</span><br><span class="line">mv ./hello_10025_world.log ./hello_10025.log</span><br><span class="line">mv ./hello_10026_world.log ./hello_10026.log</span><br><span class="line">mv ./hello_10027_world.log ./hello_10027.log</span><br><span class="line">mv ./hello_10028_world.log ./hello_10028.log</span><br><span class="line">mv ./hello_10029_world.log ./hello_10029.log</span><br><span class="line">mv ./hello_10030_world.log ./hello_10030.log</span><br><span class="line"></span><br><span class="line">-----分割线-----</span><br><span class="line">以上正是我们需要使用到的语句，最后添加管道符号让bash执行</span><br><span class="line">[root@localhost mv]# find . -type f -name &#x27;*.log&#x27; | sed -r &#x27;s#^(.*)_world(.*)#mv \0 \1\2#&#x27; | bash</span><br><span class="line"></span><br><span class="line">ll查看，完成</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="awk-工具"><a href="#awk-工具" class="headerlink" title="awk 工具"></a>awk 工具</h2><blockquote>
+<p>它更偏向于对文本的格式化处理输出，它不仅仅是一款工具，也是一门解释性语言</p>
+<p><code>awk</code>同<code>sed</code>命令类似，只不过<code>sed</code>擅长取行，<code>awk</code>命令擅长取列，awk是对文本进行格式化输出，sed更倾向于对文件进行修改；</p>
+</blockquote>
+<p>用以下文本<code>coins.txt</code>作为实验</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">gold 1 1986 USA American Eagle</span><br><span class="line">gold 1 1908 Austria-Hungary Franz josef 100 Korona</span><br><span class="line">silver 10 1981 USA ingot</span><br><span class="line">gold 1 1984 Switzerland ingot</span><br><span class="line">gold 1 1979 RSA Krugerrand</span><br><span class="line">gold 0.5 1981 RSA Krugerrand</span><br><span class="line">gold 0.1 1986 PRC Panda</span><br><span class="line">silver 1 1986 USA Liberty dollar</span><br><span class="line">gold 0.25 1986 USA Liberty 5-dollar piece</span><br><span class="line">silver 1 1986 USA Liberty 50-cent piece</span><br><span class="line">silver 1 1987 USA Constitution dollar</span><br><span class="line">gold 0.25 1987 USA Constitution 5-dollar piece</span><br><span class="line">gold 1 1988 Canada Maple leaf</span><br></pre></td></tr></table></figure>
+<p>语法格式</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk &#123;语句&#125; 执行的文件</span><br></pre></td></tr></table></figure>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">查看文本的前三列。\t 只是为了更美观显示</span><br><span class="line">[root@localhost ~]# awk &#x27;&#123;print $1 &quot;\t&quot; $2 &quot;\t&quot; $3&#125;&#x27; coins.txt</span><br><span class="line">gold	1	1986</span><br><span class="line">gold	1	1908</span><br><span class="line">silver	10	1981</span><br><span class="line">gold	1	1984</span><br><span class="line">gold	1	1979</span><br><span class="line">gold	0.5	1981</span><br><span class="line">gold	0.1	1986</span><br><span class="line">silver	1	1986</span><br><span class="line">gold	0.25	1986</span><br><span class="line">silver	1	1986</span><br><span class="line">silver	1	1987</span><br><span class="line">gold	0.25	1987</span><br><span class="line">gold	1	1988</span><br><span class="line"></span><br><span class="line">----</span><br><span class="line"></span><br><span class="line">NR是number of record；NF代表number of rield</span><br><span class="line">（注意在awk中 空格 代表的是左边和右边的拼接起来，需要用逗号进行分隔符（或者制表符&quot;\t&quot;）所以导致NF不准）</span><br><span class="line"></span><br><span class="line">显示前三行和行号：</span><br><span class="line">awk &#x27;&#123;print NR &quot;\t&quot; $1 &quot;\t&quot; $2 &quot;\t&quot; $3&#125;&#x27; coins.txt</span><br><span class="line">1	gold	1	1986</span><br><span class="line">2	gold	1	1908</span><br><span class="line">3	silver	10	1981</span><br><span class="line">4	gold	1	1984</span><br><span class="line">5	gold	1	1979</span><br><span class="line">6	gold	0.5	1981</span><br><span class="line">7	gold	0.1	1986</span><br><span class="line">8	silver	1	1986</span><br><span class="line">9	gold	0.25	1986</span><br><span class="line">10	silver	1	1986</span><br><span class="line">11	silver	1	1987</span><br><span class="line">12	gold	0.25	1987</span><br><span class="line">13	gold	1	1988</span><br><span class="line"></span><br><span class="line">-----</span><br><span class="line"></span><br><span class="line">查找</span><br><span class="line">查找1986年份的数据，可以把文本当作数据库。</span><br><span class="line">[root@localhost ~]# awk &#x27;$3==1986&#123;print $0&#125;&#x27; coins.txt </span><br><span class="line">gold 1 1986 USA American Eagle</span><br><span class="line">gold 0.1 1986 PRC Panda</span><br><span class="line">silver 1 1986 USA Liberty dollar</span><br><span class="line">gold 0.25 1986 USA Liberty 5-dollar piece</span><br><span class="line">silver 1 1986 USA Liberty 50-cent piece</span><br></pre></td></tr></table></figure>
+
+<p>更详细的链接：<br><a target="_blank" rel="noopener" href="http://www.imooc.com/wiki/shelllesson/awk.html">http://www.imooc.com/wiki/shelllesson/awk.html</a><br><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-comm-awk.html">https://www.runoob.com/linux/linux-comm-awk.html</a></p>
+<p>awk实在是太难用了，自我感觉操作列的话用<code>cut</code>反而更合适</p>
+<h2 id="cut工具"><a href="#cut工具" class="headerlink" title="cut工具"></a>cut工具</h2><blockquote>
+<p>cut是<strong>列</strong>截取工具，用于列的截取</p>
+</blockquote>
+<p>语法和选项</p>
+<p><strong>语法：</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cut 选项  文件名</span></span><br></pre></td></tr></table></figure>
+<p><strong>常见选项：</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">-c</span>:    以字符为单位进行分割,截取</span><br><span class="line"><span class="literal">-d</span>:    自定义分隔符，默认为制表符\t</span><br><span class="line"><span class="operator">-f</span>:    与<span class="literal">-d</span>一起使用，指定截取哪个区域</span><br></pre></td></tr></table></figure>
+<p><strong>举例说明:</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cut -d: -f1 1.txt             以:冒号分割，截取第1列内容</span></span><br><span class="line"><span class="comment"># cut -d: -f1,6,7 1.txt     以:冒号分割，截取第1,6,7列内容</span></span><br><span class="line"><span class="comment"># cut -c4 1.txt                 截取文件中每行第4个字符</span></span><br><span class="line"><span class="comment"># cut -c1-4 1.txt             截取文件中每行的1-4个字符</span></span><br><span class="line"><span class="comment"># cut -c4-10 1.txt             截取文件中每行的4-10个字符</span></span><br><span class="line"><span class="comment"># cut -c5- 1.txt                 从第5个字符开始截取后面所有字符</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>例子<br>用小工具列出你当系统的运行级别。5/3</li>
+</ul>
+<ol>
+<li>如何查看系统运行级别<ol>
+<li>命令<code>runlevel</code></li>
+<li>文件<code>/usr/lib/systemd/system/ctrl-alt-del.target</code></li>
+</ol>
+</li>
+<li>如何过滤运行级别<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">runlevel |cut <span class="literal">-c3</span></span><br><span class="line">runlevel | cut <span class="literal">-d</span> <span class="string">&#x27; &#x27;</span> <span class="literal">-f2</span></span><br><span class="line">grep <span class="literal">-v</span> <span class="string">&#x27;^#&#x27;</span> /etc/inittab | cut <span class="literal">-d</span>: <span class="literal">-f2</span></span><br><span class="line">grep <span class="string">&#x27;^id&#x27;</span> /etc/inittab |cut <span class="literal">-d</span>: <span class="literal">-f2</span></span><br><span class="line">grep <span class="string">&quot;initdefault:<span class="variable">$</span>&quot;</span> /etc/inittab | cut <span class="literal">-c4</span></span><br><span class="line">grep <span class="literal">-v</span> ^<span class="comment"># /etc/inittab |cut -c4</span></span><br><span class="line">grep <span class="string">&#x27;id:&#x27;</span> /etc/inittab |cut <span class="literal">-d</span>: <span class="literal">-f2</span></span><br><span class="line">cut <span class="literal">-d</span><span class="string">&#x27;:&#x27;</span> <span class="literal">-f2</span> /etc/inittab |grep <span class="literal">-v</span> ^<span class="comment">#</span></span><br><span class="line">cut <span class="literal">-c4</span> /etc/inittab |tail <span class="literal">-1</span></span><br><span class="line">cut <span class="literal">-d</span>: <span class="literal">-f2</span> /etc/inittab |tail <span class="literal">-1</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://pengyirui.github.io">葫芦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://pengyirui.github.io/posts/8421.html">https://pengyirui.github.io/posts/8421.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://pengyirui.github.io" target="_blank">食葫芦的葫芦娃</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/shell/">shell</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_6.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/6884.html"><img class="prev-cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_5.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Linux常用的快捷键</div></div></a></div><div class="next-post pull-right"><a href="/posts/f708.html"><img class="next-cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_7.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">日志切割</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/3007.html" title="linux中的变量与别名"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_13.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-01</div><div class="title">linux中的变量与别名</div></div></a></div><div><a href="/posts/f09a.html" title="shell判断"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_20.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-19</div><div class="title">shell判断</div></div></a></div><div><a href="/posts/1d8a.html" title="shell循环"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_19.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-20</div><div class="title">shell循环</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">葫芦</div><div class="author-info__description">记录互联网上的点点滴滴</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/pengyirui"><i class="fab fa-github"></i><span>并没有开源项目的GitHub</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://raw.githubusercontent.com/pengyirui/blog_img/main/weixin.jpg" target="_blank" title="微信"><i class="iconfont icon-wechat"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=1224976993" target="_blank" title="QQ"><i class="iconfont icon-qq"></i></a><a class="social-icon" href="https://space.bilibili.com/8700057" target="_blank" title="哔哩哔哩"><i class="iconfont icon-bilibili-copy"></i></a><a class="social-icon" href="https://raw.githubusercontent.com/pengyirui/blog_img/main/coolapk_addme.png" target="_blank" title="酷安"><i class="iconfont icon-kuan"></i></a><a class="social-icon" href="https://music.163.com/#/user/home?id=293495280" target="_blank" title="网易云音乐"><i class="iconfont icon-wangyiyunyinle"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>自言自语</span></div><div class="announcement_content">倘若无法意识到无意识，它就会指挥你的生活，然后你称之为命运。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#grep%E5%B7%A5%E5%85%B7"><span class="toc-number">1.</span> <span class="toc-text">grep工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sed%E5%B7%A5%E5%85%B7"><span class="toc-number">2.</span> <span class="toc-text">sed工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#awk-%E5%B7%A5%E5%85%B7"><span class="toc-number">3.</span> <span class="toc-text">awk 工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cut%E5%B7%A5%E5%85%B7"><span class="toc-number">4.</span> <span class="toc-text">cut工具</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/3b8.html" title="设计模式"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式"/></a><div class="content"><a class="title" href="/posts/3b8.html" title="设计模式">设计模式</a><time datetime="2023-01-19T02:49:02.000Z" title="发表于 2023-01-19 10:49:02">2023-01-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3b8.html" title="文章、教程记录"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_8.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文章、教程记录"/></a><div class="content"><a class="title" href="/posts/3b8.html" title="文章、教程记录">文章、教程记录</a><time datetime="2022-08-10T02:49:02.000Z" title="发表于 2022-08-10 10:49:02">2022-08-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1dft.html" title="java新特性"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-05-11-00.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java新特性"/></a><div class="content"><a class="title" href="/posts/1dft.html" title="java新特性">java新特性</a><time datetime="2022-07-27T02:00:02.000Z" title="发表于 2022-07-27 10:00:02">2022-07-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1df.html" title="博客搬家"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_6.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="博客搬家"/></a><div class="content"><a class="title" href="/posts/1df.html" title="博客搬家">博客搬家</a><time datetime="2022-07-24T02:00:02.000Z" title="发表于 2022-07-24 10:00:02">2022-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1dfc.html" title="给函数取一个好的名字"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_19.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="给函数取一个好的名字"/></a><div class="content"><a class="title" href="/posts/1dfc.html" title="给函数取一个好的名字">给函数取一个好的名字</a><time datetime="2022-01-01T02:00:02.000Z" title="发表于 2022-01-01 10:00:02">2022-01-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2023 By 葫芦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">-我可是有底线的-</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-silk-iota.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-silk-iota.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><center><script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1279698527'%3E%3C/span%3E%3Cscript src='https://s4.cnzz.com/z_stat.php%3Fid%3D1279698527%26online%3D2' type='text/javascript'%3E%3C/script%3E"));</script></center><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="122,115,116" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>大数据 | 食葫芦的葫芦娃</title><meta name="keywords" content="运维记录"><meta name="author" content="葫芦"><meta name="copyright" content="葫芦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="zookeeper、kafka、hadoop、hbase、phoenix 基础常识、工作原理及运行机制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据">
+<meta property="og:url" content="https://pengyirui.github.io/posts/1512.html">
+<meta property="og:site_name" content="食葫芦的葫芦娃">
+<meta property="og:description" content="zookeeper、kafka、hadoop、hbase、phoenix 基础常识、工作原理及运行机制">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-00.png">
+<meta property="article:published_time" content="2020-08-22T14:54:25.000Z">
+<meta property="article:modified_time" content="2022-07-27T07:16:15.360Z">
+<meta property="article:author" content="葫芦">
+<meta property="article:tag" content="运维记录">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-00.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://pengyirui.github.io/posts/1512"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 葫芦","link":"链接: ","source":"来源: 食葫芦的葫芦娃","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '大数据',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-07-27 15:16:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/font_2170815_diyzt5u455i.css"><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">食葫芦的葫芦娃</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">大数据</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-08-22T14:54:25.000Z" title="发表于 2020-08-22 22:54:25">2020-08-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-27T07:16:15.360Z" title="更新于 2022-07-27 15:16:15">2022-07-27</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>21分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="大数据"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="大数据概念"><a href="#大数据概念" class="headerlink" title="大数据概念"></a>大数据概念</h2><p>大数据（Big Data）：指<code>无法在一定时间范围</code>内用常规软件工具进行捕捉、管理和处理的数据集合，是需要新处理模式才能具有更强的决策力、洞察发现力和流程优化能力的<code>海量、高增长率和多样化的信息资产</code>。</p>
+<p>主要解决，海量数据的存储和海量数据的分析计算问题。并且有以下特点。</p>
+<ul>
+<li><p>Volune（大量）<br>截至目前，人类生的所有印刷材料的数据量是200PB，而历史上全人类总共说过的话的数据量大约是5EB。当前，典型个人计算机硬盘的容量为TB量级，而一些大企业的数据量已经接近EB量级。</p>
+</li>
+<li><p>Velocity（高速）<br>这是大数据区分于传统数据挖掘的最显著持征。根据IC的”数字宇宙”的报告，预计到2020年，全球数据使用量将达到3.22B。在如此海量的数据面前，处理数据的效率就是企业的生命。</p>
+</li>
+<li><p>Variety（多样）<br>这种类型的多样性也让数据被分为结构化数据和非结构化数据。相对于以往便于存储的以数据库文本为主的结构化数据，非结构化数据越来越多，包括网络日志、音频、视频、图片、地理位置信息等，这些多类型的数据对数据的处理能力提出了更高要求。</p>
+</li>
+<li><p>Value（低价值密度）<br>如何快速对有价值数据“提纯”成为目前大数据背景下待解决的难题。</p>
+</li>
+</ul>
+<h2 id="hadoop"><a href="#hadoop" class="headerlink" title="hadoop"></a>hadoop</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ol>
+<li>Hadoop是一个由Apache基金会所开发的分布式系统基础架构。</li>
+<li>主要解决，海量数据的<em>存储 <em>和海量数据的</em>分析计算</em>问题。</li>
+<li>广义上来说，Hadoop通常是指一个更广泛的概念——Hadoop生态圈。<br><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-16.png"><br><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-17.png" alt="大数据技术生态体系"></li>
+</ol>
+<p>Hadoop三大发行版本：<code>Apache</code>、<code>Cloudera</code>、<code>Hortonworks</code>。<br>Apache版本最原始（最基础）的版本，对于入门学习最好。<br>Cloudera在大型互联网企业中用的较多。<br>Hortonworks文档较好。</p>
+<h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3><h4 id="产生背景"><a href="#产生背景" class="headerlink" title="产生背景"></a>产生背景</h4><p>随着数据量越来越大，在一个操作系统存不下所有的数据，那么就分配到更多的操作系统管理的磁盘中，但是不方便管理和维护，<code>迫切需要一种系统来管理多台机器上的文件</code>，这就是分布式文件管理系统。<code>HDFS只是分布式文件管理系统中的一种</code>。</p>
+<h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>HDFS（Hadoop Distributed File System），它是一个<code>文件系统</code>，用于存储文件，通过目录树来定位文件；其次，它是分布式的，由很多服务器联合起来实现其功能，集群中的服务器有各自的角色。<br>HDFS的使用场景：<code>适合一次写入，多次读出的场景，且不支持文件的修改。</code>适合用来做数据分析，并不适台用来做网盘应用。</p>
+<h4 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h4><ul>
+<li>优点：<ol>
+<li>高容错性:<br> 数据自动保存多个副本。它通过增加副本的形式，提高容错性。<br> 某一个副本丢失以后，它可以自动恢复。</li>
+<li>适合处理大数据：<br> 数据规模：能够处理数据规模达到GB、TB、甚至PB级别的数据。<br> 文件规模：能够处理百万规模以上的文件数量，数量相当之大。</li>
+<li>可构建在廉价机器上<br> 通过多副本机制，提高可靠性。</li>
+</ol>
+</li>
+<li>缺点：<ol>
+<li>不适合低延时数据访问，比如毫秒级的存储数据，是做不到的。</li>
+<li>无法高效的对大量小文件进行存储。<br> 存储大量小文件的话，它会占用NameNode大量的内存来存储文件目录和块信息。这样是不可取的，因为NameNode的内存总是有限的。<br> 小文件存储的寻址时间会超过读取时间，它违反了HDFS的设计目标。<br> <code>为什么块的大小不能设置太小，也不能太大？</code><br> HDFS的块设置太小，会增加寻址时间，程序一直在找块的开始位置。<br> 如果块设置的太大，从磁盘传输数据的时间会明显大于定位这个块开始位置所需的时间。导致程序在处理这块数据时，会非常慢。<br> <code>总结</code>：HDFS块的大小设置主要取决于磁盘传输速率。</li>
+<li>不支持并发写入、文件随机修改。<br> 一个文件只能有一个写，不允许多个线程同时写；<br> 仅支持数据append（追加），不支持文件的随机修改。</li>
+</ol>
+</li>
+</ul>
+<h4 id="HDFS架构概述"><a href="#HDFS架构概述" class="headerlink" title="HDFS架构概述"></a>HDFS架构概述</h4><ol>
+<li>NameNode（nn）：<br> 它是个主管、管理者<br> 存储文件的元数据，如文件名，文件目录结构，文件属性（生成时间、副本数、文件权限）。<br> 配置副本策略。<br> 处理客户端读写请求。<br> 每个文件的块列表和块所在的DataNode等。</li>
+<li>DataNode（dn）：<br> 在本地文件系统存储文件块发据。<br> 存储实际的数据块。<br> 执行数据块的读/写操作。<br> 块数据的校验和。</li>
+<li>Secondary NameNo de（2nn）：<br> 用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照。<br> 并非NarneNode的热备。当NameNode挂掉的时候，它并不能马上替换NameNode并提供服务。<br> 辅助NameNode，分担其I作量，比如定期合并F simageE dits，并推送给NameNode。<br> 在紧急情况下，可辅助恢复NameNode。</li>
+<li>Client：就是客户端。<br> 文件切分。文件上传HDFS的时候，Client将文件切分 成一个一个的Block，然后进行上传；<br> 与NameNode交互，获取文件的位置信息；<br> 与DataNode交互，读取或者写入数据；<br> Clien提供一些命令 来管理HDFS，比如lameNode格式化；<br> Client可以通过一些命令来访问HDFS，比如对HDFS增删直改操作；</li>
+</ol>
+<h4 id="文件的写入"><a href="#文件的写入" class="headerlink" title="文件的写入"></a>文件的写入</h4><ol>
+<li>客户端通过Distributed FileSystem模块向NameNode请求上传文件，NameNode检查目标文件是否已存在，父目录是否存在。</li>
+<li>NameNode返回是否可以上传。</li>
+<li>客户端请求第一个 Block上传到哪几个DataNode服务器上。</li>
+<li>NameNode返回3个DataNode节点，分别为dn1、dn2、dn3。</li>
+<li>客户端通过FSDataOutputStream模块请求dn1上传数据，dn1收到请求会继续调用dn2，然后dn2调用dn3，将这个通信管道建立完成。</li>
+<li>dn1、dn2、dn3逐级应答客户端。</li>
+<li>客户端开始往dn1上传第一个Block（先从磁盘读取数据放到一个本地内存缓存），以Packet为单位，dn1收到一个Packet就会传给dn2，dn2传给dn3；dn1每传一个packet会放入一个应答队列等待应答。</li>
+<li>当一个Block传输完成之后，客户端再次请求NameNode上传第二个Block的服务器。（重复执行3-7步）。</li>
+</ol>
+<h4 id="节点距离计算"><a href="#节点距离计算" class="headerlink" title="节点距离计算"></a>节点距离计算</h4><p>两个节点到达最近的共同祖先的距离总和。<br>在HDFS写数据的过程中，NameNode会选择距离待上传数据最近距离的DataNode接收数据<br>例如，假设有数据中心d1机架r1中的节点n1。该节点可以表示为/d1/r1/n1。利用这种标记，这里给出四种距离描述，如图<br><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-09-19-03.png"></p>
+<h4 id="机架感知（副本存储节点选择）"><a href="#机架感知（副本存储节点选择）" class="headerlink" title="机架感知（副本存储节点选择）"></a>机架感知（副本存储节点选择）</h4><p>官方文档：<a target="_blank" rel="noopener" href="http://hadoop.apache.org/docs/r2.7.2/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#Data_Replication">http://hadoop.apache.org/docs/r2.7.2/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#Data_Replication</a><br>第一个副本在Client所处的节点上。<br>如果客户端在集群外，随机选一个。<br>第二个副本和第一个副本位于相同机架，随机节点。<br>第三个副本位于不同机架，随机节点。</p>
+<h3 id="YARN架构概述"><a href="#YARN架构概述" class="headerlink" title="YARN架构概述"></a>YARN架构概述</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-09-13-02.png"></p>
+<h4 id="MapReduce概述"><a href="#MapReduce概述" class="headerlink" title="MapReduce概述"></a>MapReduce概述</h4><p>MapReduce是<code>一个分布式运算程序的编程框架</code>，是用户开发“基于Hadoop的数据分析应用”的核心框架。<br>MapReduce核心功能是将<code>用户编写的业务逻辑代码</code>和<code>自带默认组件</code>整合成一个完整的<code>分布式运算程序</code>，并发运行在一个Hadoop集群上。</p>
+<h4 id="优缺点-1"><a href="#优缺点-1" class="headerlink" title="优缺点"></a>优缺点</h4><ul>
+<li>优点<ol>
+<li>易于编程：<br> <code>它简单的实现一些接口，就可以完成一个分布式程序</code>，这个分布式程序可以分布到大量廉价的PC机器上运行。</li>
+<li>良好的扩展性:<br> 当你的计算资源不能得到满足的时候，你可以通过<code>简单的增加机器</code>来扩展它的计算能力。</li>
+<li>高容错性：<br> MapReduce设计的初衷就是使程序能够部署在廉价的PC机器上，这就要求它具有很高的容错性。比如<code>其中一台机器挂了，它可以把上面的计算任务转移到另外一个节点上运行</code>，不至于这个任务运行失败，而且这个过程不需要人工参与，而完全是由Hadoop内部完成的。</li>
+<li>适合PB级以上海量数据的离线处理：<br> 可以实现上千台服务器集群并发工作，提供数据处理能力。</li>
+</ol>
+</li>
+<li>缺点<ol>
+<li>不擅长实时计算<br> 无法像MySQL一样，在毫秒或者秒级内返回结果。</li>
+<li>不擅长流式计算<br> 流式计算的输入数据是动态的，而MapReduce的<code>输入数据集是静态的</code>，不能动态变化。这是因为MapReduce自身的设计特点决定了数据源必须是静态的。</li>
+<li>不擅长DAG（有向图）计算<br> 多个应用程序存在依赖关系，后一个应用程序的输入为前一个的输出。在这种情况下，MapReduce并不是不能做，而是使用后，每个MapReduce作业的输出结果都会写入到磁盘，<code>会造成大量的磁盘IO</code>，导致性能非常的低下。</li>
+</ol>
+</li>
+</ul>
+<h4 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h4><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-09-19-04.png"></p>
+<ol>
+<li>分布式的运算程序往往需要分成至少2个阶段。</li>
+<li>第一个阶段的MapTask并发实例，完全并行运行，互不相干。</li>
+<li>第二个阶段的ReduceTask并发实例互不相干，但是他们的数据依赖于上一个阶段的所有MapTask并发实例的输出。</li>
+<li>MapReduce编程模型只能包含一个Map阶段和一个Reduce阶段，如果用户的业务逻辑非常复杂，那就只能多个MapReduce程序，串行运行。<br>总结：分析WordCount数据流走向深入理解MapReduce核心思想。</li>
+</ol>
+<h4 id="MapReduce架构流程"><a href="#MapReduce架构流程" class="headerlink" title="MapReduce架构流程"></a>MapReduce架构流程</h4><ol>
+<li>Map阶段并行处理输入数据</li>
+<li>Reduce阶段对Map结果进行汇总</li>
+</ol>
+<h2 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li><p><code>Zookeeper</code>是一个开源的分布式的，为分布式应用提供<em>协调服务</em>的Apache项目。</p>
+</li>
+<li><p>特点<br>  <img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-05.png"></p>
+<ol>
+<li>Zookeeper：一个领导者（Leader），多个跟随者（Follower）组成的集群。</li>
+<li>集群中只要有半数以上首点存活，Zookeeper集群就能正常服务。</li>
+<li>全局数据一致：每个Server保存一份相同的数据副本，Client无论连接到哪个Server，数据都是一致的。</li>
+<li>更新请求顺序进行，来自同一个Client的更新请求按其发送顺序依次执行。</li>
+<li>数据更新原子性，一次数据更新要么成功，要么失败。</li>
+<li>实时性，在一定时间范围内，Client能读到最新数据。</li>
+</ol>
+</li>
+<li><p>结构<br>  ZooKeeper效据模型的结构与Unix文件系统很类似，整体上可以看作是一棵树，每个节点称做一个ZNode，每一个ZNode默认能够存储IMB的数据，每个ZNode都可以通过其路径唯一标识。<br>  <img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-06.png"></p>
+</li>
+</ul>
+<h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><h4 id="节点类型"><a href="#节点类型" class="headerlink" title="节点类型"></a>节点类型</h4><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-07.png"></p>
+<h4 id="Stat结构体"><a href="#Stat结构体" class="headerlink" title="Stat结构体"></a>Stat结构体</h4><ol>
+<li>czxid-创建节点的事务zxid<br>每次修改ZooKeeper状态都会收到一个zxid形式的时间戳，也就是ZooKeeper事务ID。<br>事务ID是ZooKeeper中所有修改总的次序。每个修改都有唯一的zxid，如果zxid1小于zxid2，那么zxid1在zxid2之前发生。</li>
+<li>ctime - znode被创建的毫秒数(从1970年开始)</li>
+<li>mzxid - znode最后更新的事务zxid</li>
+<li>mtime - znode最后修改的毫秒数(从1970年开始)</li>
+<li>pZxid-znode最后更新的子节点zxid</li>
+<li>cversion - znode子节点变化号，znode子节点修改次数</li>
+<li>dataversion - znode数据变化号</li>
+<li>aclVersion - znode访问控制列表的变化号</li>
+<li>ephemeralOwner- 如果是临时节点，这个是znode拥有者的session id。如果不是临时节点则是0。</li>
+<li>dataLength- znode的数据长度</li>
+<li>numChildren - znode子节点数量</li>
+</ol>
+<h4 id="监听器原理"><a href="#监听器原理" class="headerlink" title="监听器原理"></a>监听器原理</h4><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-08.png"></p>
+<h4 id="选举机制"><a href="#选举机制" class="headerlink" title="选举机制"></a>选举机制</h4><ol>
+<li>半数机制：集群中半数以上机器存活，集群可用。所以Zookeeper适合安装奇数台服务器。</li>
+<li>Zookeeper虽然在配置文件中并没有指定Master和Slave。但是，Zookeeper工作时，是有一个节点为Leader，其他则为Follower，Leader是通过内部的选举机制临时产生的。</li>
+<li>以一个简单的例子来说明整个选举的过程。<br>假设有五台服务器组成的Zookeeper集群，它们的id从1-5，同时它们都是最新启动的，也就是没有历史数据，在存放数据量这一点上，都是一样的。假设这些服务器依序启动，来看看会发生什么(如图)<br> <img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-09.png"><ul>
+<li>服务器1启动，发起一次选举。服务器1投自己一票。此时服务器1票数一票，不够半数以上（3票），选举无法完成，服务器1状态保持为LOOKING；</li>
+<li>服务器2启动，再发起一次选举。服务器1和2分别投自己一票并交换选票信息：此时服务器1发现服务器2的ID比自己目前投票推举的（服务器1）大，更改选票为推举服务器2。此时服务器1票数0票，服务器2票数2票，没有半数以上结果，选举无法完成，服务器1，2状态保持LOOKING</li>
+<li>服务器3启动，发起一次选举。此时服务器1和2都会更改选票为服务器3。此次投票结果：服务器1为0票，服务器2为0票，服务器3为3票。此时服务器3的票数已经超过半数，服务器3当选Leader。服务器1，2更改状态为FOLLOWING，服务器3更改状态为LEADING；</li>
+<li>服务器4启动，发起一次选举。此时服务器1，2，3已经不是LOOKING状态，不会更改选票信息。交换选票信息结果：服务器3为3票，服务器4为1票。此时服务器4服从多数，更改选票信息为服务器3，并更改状态为FOLLOWING；</li>
+<li>服务器5启动，同4一样当小弟。</li>
+</ul>
+</li>
+</ol>
+<h4 id="写数据流程"><a href="#写数据流程" class="headerlink" title="写数据流程"></a>写数据流程</h4><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-10.png"></p>
+<h2 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h2><h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><p>在流式计算中，Kafka一般用来缓存数据，Storm通过消费Kafka的数据进行计算。</p>
+<h4 id="什么是Kafka"><a href="#什么是Kafka" class="headerlink" title="什么是Kafka"></a>什么是Kafka</h4><ol>
+<li>Apache Kafka是一个开源消息系统，由Scala写成。是由Apache软件基金会开发的一个开源消息系统项目。</li>
+<li>Kafka最初是由LinkedIn公司开发，并于2011年初开源。2012年10月从Apache Incubator毕业。该项目的目标是为处理实时数据提供一个统一、高通量、低等待的平台。</li>
+<li>Kafka是一个分布式消息队列。Kafka对消息保存时根据Topic进行归类，发送消息者称为Producer，消息接受者称为Consumer，此外kafka集群有多个kafka实例组成，每个实例(server)称为broker。</li>
+<li>无论是kafka集群，还是consumer都依赖于zookeeper集群保存一些meta信息，来保证系统可用性。</li>
+</ol>
+<h4 id="Kafka架构"><a href="#Kafka架构" class="headerlink" title="Kafka架构"></a>Kafka架构</h4><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-12.png" alt="详细版"><br><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-11.png" alt="精简版"></p>
+<ol>
+<li>Producer ：消息生产者，就是向kafka broker发消息的客户端；</li>
+<li>Consumer ：消息消费者，向kafka broker取消息的客户端；</li>
+<li>Topic ：可以理解为一个队列；</li>
+<li> Consumer Group （CG）：这是kafka用来实现一个topic消息的广播（发给所有的consumer）和单播（发给任意一个consumer）的手段。一个topic可以有多个CG。topic的消息会复制（不是真的复制，是概念上的）到所有的CG，但每个partion只会把消息发给该CG中的一个consumer。如果需要实现广播，只要每个consumer有一个独立的CG就可以了。要实现单播只要所有的consumer在同一个CG。用CG还可以将consumer进行自由的分组而不需要多次发送消息到不同的topic；</li>
+<li>Broker ：一台kafka服务器就是一个broker。一个集群由多个broker组成。一个broker可以容纳多个topic；</li>
+<li>Partition：为了实现扩展性，一个非常大的topic可以分布到多个broker（即服务器）上，一个topic可以分为多个partition，每个partition是一个有序的队列。partition中的每条消息都会被分配一个有序的id（offset）。kafka只保证按一个partition中的顺序将消息发给consumer，不保证一个topic的整体（多个partition间）的顺序；</li>
+<li>Offset：kafka的存储文件都是按照offset.kafka来命名，用offset做名字的好处是方便查找。例如你想找位于2049的位置，只要找到2048.kafka的文件即可。当然the first offset就是00000000000.kafka。</li>
+</ol>
+<h4 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h4><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-13.png"></p>
+<ol>
+<li>点对点模式（一对一，消费者主动拉取数据，消息收到后消息清除）<br>点对点模型通常是一个基于拉取或者轮询的消息传送模型，这种模型从队列中请求信息，而不是将消息推送到客户端。这个模型的特点是发送到队列的消息被一个且只有一个接收者接收处理，即使有多个消息监听者也是如此。</li>
+<li>发布/订阅模式（一对多，数据生产后，推送给所有订阅者）<br>发布订阅模型则是一个基于推送的消息传送模型。发布订阅模型可以有多种不同的订阅者，临时订阅者只在主动监听主题时才接收消息，而持久订阅者则监听主题的所有消息，即使当前订阅者不可用，处于离线状态。</li>
+</ol>
+<ul>
+<li>为什么需要消息队列<ol>
+<li>解耦：<br>　　允许你独立的扩展或修改两边的处理过程，只要确保它们遵守同样的接口约束。</li>
+<li>冗余：消息队列把数据进行持久化直到它们已经被完全处理，通过这一方式规避了数据丢失风险。许多消息队列所采用的”插入-获取-删除”范式中，在把一个消息从队列中删除之前，需要你的处理系统明确的指出该消息已经被处理完毕，从而确保你的数据被安全的保存直到你使用完毕。</li>
+<li>扩展性：<br>因为消息队列解耦了你的处理过程，所以增大消息入队和处理的频率是很容易的，只要另外增加处理过程即可。</li>
+<li>灵活性 &amp; 峰值处理能力：<br>在访问量剧增的情况下，应用仍然需要继续发挥作用，但是这样的突发流量并不常见。如果为以能处理这类峰值访问为标准来投入资源随时待命无疑是巨大的浪费。使用消息队列能够使关键组件顶住突发的访问压力，而不会因为突发的超负荷的请求而完全崩溃。</li>
+<li>可恢复性：<br>系统的一部分组件失效时，不会影响到整个系统。消息队列降低了进程间的耦合度，所以即使一个处理消息的进程挂掉，加入队列中的消息仍然可以在系统恢复后被处理。</li>
+<li>顺序保证：<br>在大多使用场景下，数据处理的顺序都很重要。大部分消息队列本来就是排序的，并且能保证数据会按照特定的顺序来处理。（Kafka保证一个Partition内的消息的有序性）</li>
+<li>缓冲：<br>有助于控制和优化数据流经过系统的速度，解决生产消息和消费消息的处理速度不一致的情况。</li>
+<li>异步通信：<br>很多时候，用户不想也不需要立即处理消息。消息队列提供了异步处理机制，允许用户把一个消息放入队列，但并不立即处理它。想向队列中放入多少消息就放多少，然后在需要的时候再去处理它们。</li>
+</ol>
+</li>
+</ul>
+<h3 id="生产过程分析以及原理"><a href="#生产过程分析以及原理" class="headerlink" title="生产过程分析以及原理"></a>生产过程分析以及原理</h3><h4 id="写入方式"><a href="#写入方式" class="headerlink" title="写入方式"></a>写入方式</h4><p>producer采用推（push）模式将消息发布到broker，每条消息都被追加（append）到分区（patition）中，属于顺序写磁盘（顺序写磁盘效率比随机写内存要高，保障kafka吞吐率）。</p>
+<h4 id="分区（Partition）"><a href="#分区（Partition）" class="headerlink" title="分区（Partition）"></a>分区（Partition）</h4><p>消息发送时都被发送到一个topic，其本质就是一个目录，而topic是由一些Partition Logs(分区日志)组成，其组织结构如下图所示：<br><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-14.png"><br>每个Partition中的消息都是有序的，生产的消息被不断追加到Partition log上，其中的每一个消息都被赋予了一个唯一的offset值。</p>
+<ul>
+<li>分区的原因<ol>
+<li>方便在集群中扩展，每个Partition可以通过调整以适应它所在的机器，而一个topic又可以有多个Partition组成，因此整个集群就可以适应任意大小的数据了；</li>
+<li>可以提高并发，因为可以以Partition为单位读写了。</li>
+</ol>
+</li>
+<li>分区的原则<ol>
+<li>指定了patition，则直接使用；</li>
+<li>未指定patition但指定key，通过对key的value进行hash出一个patition；</li>
+<li>patition和key都未指定，使用轮询选出一个patition。</li>
+</ol>
+</li>
+</ul>
+<h4 id="副本（Replication）"><a href="#副本（Replication）" class="headerlink" title="副本（Replication）"></a>副本（Replication）</h4><p>同一个partition可能会有多个replication（对应 server.properties 配置中的 default.replication.factor=N）。没有replication的情况下，一旦broker 宕机，其上所有 patition 的数据都不可被消费，同时producer也不能再将数据存于其上的patition。引入replication之后，同一个partition可能会有多个replication，而这时需要在这些replication之间选出一个leader，producer和consumer只与这个leader交互，其它replication作为follower从leader 中复制数据。</p>
+<h4 id="写入流程"><a href="#写入流程" class="headerlink" title="写入流程"></a>写入流程</h4><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-15.png"></p>
+<ol>
+<li>producer先从zookeeper的 “/brokers/…/state”节点找到该partition的leader</li>
+<li>producer将消息发送给该leader</li>
+<li>leader将消息写入本地log</li>
+<li>followers从leader pull消息，写入本地log后向leader发送ACK</li>
+<li>leader收到所有ISR中的replication的ACK后，增加HW（high watermark，最后commit 的offset）并向producer发送ACK</li>
+</ol>
+<h2 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h2><p>HBase是一种分布式、可扩展、支持海量数据存储的 NoSQL数据库<br>官方文档：<a target="_blank" rel="noopener" href="http://hbase.apache.org/book.html#_preface">http://hbase.apache.org/book.html#_preface</a></p>
+<h3 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h3><p>逻辑上，HBase 的数据模型同关系型数据库很类似，数据存储在一张表中，有行有列。<br>但从 HBase 的底层物理存储结构（K-V）来看，HBase 更像是一个 multi-dimensional map。</p>
+<ol>
+<li>Name Space<br>命名空间，类似于关系型数据库的 DatabBase 概念，每个命名空间下有多个表。HBase<br>有两个自带的命名空间，分别是 hbase 和 default，hbase 中存放的是 HBase 内置的表，<br>default表是用户默认使用的命名空间。 </li>
+<li>Region<br>类似于关系型数据库的表概念。不同的是，HBase定义表时只需要声明列族即可，不需<br>要声明具体的列。这意味着，往HBase写入数据时，字段可以动态、按需指定。因此，和关<br>系型数据库相比，HBase能够轻松应对字段变更的场景。 </li>
+<li>Row<br>HBase表中的每行数据都由一个RowKey 和多个Column（列）组成，数据是按照 RowKey<br>的字典顺序存储的，并且查询数据时只能根据 RowKey 进行检索，所以RowKey的设计十分重<br>要。 </li>
+<li>Column<br>HBase中的每个列都由 Column Family(列族)和 Column Qualifier（列限定符）进行限<br>定，例如info：name，info：age。建表时，只需指明列族，而列限定符无需预先定义。 </li>
+<li>Time Stamp<br>用于标识数据的不同版本（version），每条数据写入时，如果不指定时间戳，系统会<br>自动为其加上该字段，其值为写入 HBase的时间。 </li>
+<li>Cell<br>由{rowkey, column Family：column Qualifier, time Stamp} 唯一确定的单元。cell 中的数<br>据是没有类型的，全部是字节码形式存贮。</li>
+</ol>
+<h3 id="架构角色"><a href="#架构角色" class="headerlink" title="架构角色"></a>架构角色</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-18.png" alt="基本架构"></p>
+<ul>
+<li>Region Server<br>Region Server为 Region的管理者，其实现类为 HRegionServer，主要作用如下:<br>对于数据的操作：get, put, delete；<br>对于 Region的操作：splitRegion、compactRegion。 </li>
+<li>Master<br>Master是所有Region Server的管理者，其实现类为 HMaster，主要作用如下：<br>对于表的操作：create, delete, alter<br>对于RegionServer的操作：分配regions到每个RegionServer，监控每个RegionServer<br>的状态，负载均衡和故障转移。 </li>
+<li>Zookeeper<br>HBase 通过Zookeeper 来做 Master 的高可用、RegionServer 的监控、元数据的入口以及<br>集群配置的维护等工作。 </li>
+<li>HDFS<br>HDFS 为HBase 提供最终的底层数据存储服务，同时为HBase 提供高可用的支持。</li>
+</ul>
+<h3 id="架构原理"><a href="#架构原理" class="headerlink" title="架构原理"></a>架构原理</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-09-18-01.png"></p>
+<ul>
+<li>StoreFile<br>保存实际数据的物理文件，StoreFile 以 HFile 的形式存储在 HDFS 上。每个 Store 会有<br>一个或多个 StoreFile（HFile），数据在每个 StoreFile 中都是有序的。</li>
+<li>MemStore<br>写缓存，由于HFile 中的数据要求是有序的，所以数据是先存储在MemStore 中，排好序后，等到达刷写时机才会刷写到HFile，每次刷写都会形成一个新的HFile。 </li>
+<li>WAL<br>由于数据要经 MemStore 排序后才能刷写到 HFile，但把数据保存在内存中会有很高的 概率导致数据丢失，为了解决这个问题，数据会先写在一个叫做 Write-Ahead logfile 的文件 中，然后再写入MemStore中。所以在系统出现故障的时候，数据可以通过这个日志文件重<br>建。</li>
+</ul>
+<h3 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-09-18-03.png"></p>
+<ul>
+<li>Client 先访问 zookeeper，获取 hbase:meta 表位于哪个 Region Server。</li>
+<li>访问对应的 Region Server，获取 hbase:meta 表，根据读请求的 namespace:table/rowkey， 查询出目标数据位于哪个 Region Server 中的哪个 Region 中。并将该 table 的 region 信息以及 meta 表的位置信息缓存在客户端的 meta cache，方便下次访问。</li>
+<li>与目标 Region Server 进行通讯；</li>
+<li>将数据顺序写入（追加）到WAL；</li>
+<li>将数据写入对应的 MemStore，数据会在 MemStore 进行排序；</li>
+<li>向客户端发送 ack；</li>
+<li>等达到 MemStore 的刷写时机后，将数据刷写到 HFile。</li>
+</ul>
+<h3 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h3><p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-09-18-02.png"></p>
+<ul>
+<li>Client 先访问 zookeeper，获取 hbase:meta 表位于哪个 Region Server。</li>
+<li>访问对应的 Region Server，获取 hbase:meta 表，根据读请求的 namespace:table/rowkey， 查询出目标数据位于哪个 Region Server 中的哪个 Region 中。并将该 table 的 region 信息以<br>及 meta 表的位置信息缓存在客户端的 meta cache，方便下次访问。</li>
+<li>与目标 Region Server 进行通讯；</li>
+<li>分别在 Block Cache（读缓存），MemStore 和 Store File（HFile）中查询目标数据，并将<br>查到的所有数据进行合并。此处所有数据是指同一条数据的不同版本（time stamp）或者不<br>同的类型（Put/Delete）。</li>
+<li>将从文件中查询到的数据块（Block，HFile数据存储单元，默认大小为64KB）缓存到<br>Block Cache。</li>
+<li>将合并后的最终结果返回给客户端。</li>
+</ul>
+<h2 id="Phoenix"><a href="#Phoenix" class="headerlink" title="Phoenix"></a>Phoenix</h2><p>Phoenix 是 <code>HBase</code> 和 <code>SQL Apache</code>顶级开源项目<br>社区公认的HBase上最合适的SQL层，支持毫秒级到秒级的低延时OLTP和操作型分析查询Phoenix核心能力</p>
+<p>SQL引擎层<br>支持标准SQL 92，转为SQL为HBase API<br>算子、过滤条件下推到Server端，并行执行<br>轻量级事务、二级索引、动态列、分页查询等多种SQL层能力<br>JDBC Driver Metadata管理<br>集成<code>Spark.Hive.Pig.Flume</code>和<code>MapReduce</code></p>
+<p><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-19.png" alt="架构"></p>
+<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><p>Phoenix的SQL实现原理主要也是基于一系列的Scan操作来完成，Scan是HBase的批量扫描过程。这一系列的Scan操作也是分散到各台RegionServer上通过Coprocessor来完成。主要用到的是RegionObserver，通过RegionObserver在postScannerOpen Hook中将RegionScanner替换成支持聚合操作的定制化Scanner，在真正执行聚合时，会通过自定的Scan属性传递给RegionScanner，在这个Scan中也可加入一些过滤规则，尽量减少返回Client的结果。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://pengyirui.github.io">葫芦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://pengyirui.github.io/posts/1512.html">https://pengyirui.github.io/posts/1512.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://pengyirui.github.io" target="_blank">食葫芦的葫芦娃</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%BF%90%E7%BB%B4%E8%AE%B0%E5%BD%95/">运维记录</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-08-22-00.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/f708.html"><img class="prev-cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_7.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">日志切割</div></div></a></div><div class="next-post pull-right"><a href="/posts/3a99.html"><img class="next-cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_21.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">LVM XFS增加硬盘分区容量</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/4fe2.html" title="mysql主主、从同步"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-04-14-00.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-11</div><div class="title">mysql主主、从同步</div></div></a></div><div><a href="/posts/f81f.html" title="mysql三大日志"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2020-04-14-00.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-21</div><div class="title">mysql三大日志</div></div></a></div><div><a href="/posts/71b0.html" title="tomcat、mysql、nginx、redis版本升级"><img class="cover" src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_21.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-12</div><div class="title">tomcat、mysql、nginx、redis版本升级</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">葫芦</div><div class="author-info__description">记录互联网上的点点滴滴</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/pengyirui"><i class="fab fa-github"></i><span>并没有开源项目的GitHub</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://raw.githubusercontent.com/pengyirui/blog_img/main/weixin.jpg" target="_blank" title="微信"><i class="iconfont icon-wechat"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=1224976993" target="_blank" title="QQ"><i class="iconfont icon-qq"></i></a><a class="social-icon" href="https://space.bilibili.com/8700057" target="_blank" title="哔哩哔哩"><i class="iconfont icon-bilibili-copy"></i></a><a class="social-icon" href="https://raw.githubusercontent.com/pengyirui/blog_img/main/coolapk_addme.png" target="_blank" title="酷安"><i class="iconfont icon-kuan"></i></a><a class="social-icon" href="https://music.163.com/#/user/home?id=293495280" target="_blank" title="网易云音乐"><i class="iconfont icon-wangyiyunyinle"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>自言自语</span></div><div class="announcement_content">倘若无法意识到无意识，它就会指挥你的生活，然后你称之为命运。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">大数据概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hadoop"><span class="toc-number">2.</span> <span class="toc-text">hadoop</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HDFS"><span class="toc-number">2.2.</span> <span class="toc-text">HDFS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E8%83%8C%E6%99%AF"><span class="toc-number">2.2.1.</span> <span class="toc-text">产生背景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">2.2.2.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">2.2.3.</span> <span class="toc-text">优缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HDFS%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0"><span class="toc-number">2.2.4.</span> <span class="toc-text">HDFS架构概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9A%84%E5%86%99%E5%85%A5"><span class="toc-number">2.2.5.</span> <span class="toc-text">文件的写入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E8%B7%9D%E7%A6%BB%E8%AE%A1%E7%AE%97"><span class="toc-number">2.2.6.</span> <span class="toc-text">节点距离计算</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%BA%E6%9E%B6%E6%84%9F%E7%9F%A5%EF%BC%88%E5%89%AF%E6%9C%AC%E5%AD%98%E5%82%A8%E8%8A%82%E7%82%B9%E9%80%89%E6%8B%A9%EF%BC%89"><span class="toc-number">2.2.7.</span> <span class="toc-text">机架感知（副本存储节点选择）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#YARN%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0"><span class="toc-number">2.3.</span> <span class="toc-text">YARN架构概述</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MapReduce%E6%A6%82%E8%BF%B0"><span class="toc-number">2.3.1.</span> <span class="toc-text">MapReduce概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">优缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="toc-number">2.3.3.</span> <span class="toc-text">核心思想</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MapReduce%E6%9E%B6%E6%9E%84%E6%B5%81%E7%A8%8B"><span class="toc-number">2.3.4.</span> <span class="toc-text">MapReduce架构流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper"><span class="toc-number">3.</span> <span class="toc-text">zookeeper</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">3.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.2.1.</span> <span class="toc-text">节点类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Stat%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-number">3.2.2.</span> <span class="toc-text">Stat结构体</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%91%E5%90%AC%E5%99%A8%E5%8E%9F%E7%90%86"><span class="toc-number">3.2.3.</span> <span class="toc-text">监听器原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6"><span class="toc-number">3.2.4.</span> <span class="toc-text">选举机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%99%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B"><span class="toc-number">3.2.5.</span> <span class="toc-text">写数据流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kafka"><span class="toc-number">4.</span> <span class="toc-text">kafka</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0-1"><span class="toc-number">4.1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFKafka"><span class="toc-number">4.1.1.</span> <span class="toc-text">什么是Kafka</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kafka%E6%9E%B6%E6%9E%84"><span class="toc-number">4.1.2.</span> <span class="toc-text">Kafka架构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">4.1.3.</span> <span class="toc-text">消息队列</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90%E4%BB%A5%E5%8F%8A%E5%8E%9F%E7%90%86"><span class="toc-number">4.2.</span> <span class="toc-text">生产过程分析以及原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E6%96%B9%E5%BC%8F"><span class="toc-number">4.2.1.</span> <span class="toc-text">写入方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%EF%BC%88Partition%EF%BC%89"><span class="toc-number">4.2.2.</span> <span class="toc-text">分区（Partition）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%AF%E6%9C%AC%EF%BC%88Replication%EF%BC%89"><span class="toc-number">4.2.3.</span> <span class="toc-text">副本（Replication）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B"><span class="toc-number">4.2.4.</span> <span class="toc-text">写入流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HBase"><span class="toc-number">5.</span> <span class="toc-text">HBase</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="toc-number">5.1.</span> <span class="toc-text">数据模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E8%A7%92%E8%89%B2"><span class="toc-number">5.2.</span> <span class="toc-text">架构角色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86"><span class="toc-number">5.3.</span> <span class="toc-text">架构原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E6%B5%81%E7%A8%8B"><span class="toc-number">5.4.</span> <span class="toc-text">写流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BB%E6%B5%81%E7%A8%8B"><span class="toc-number">5.5.</span> <span class="toc-text">读流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Phoenix"><span class="toc-number">6.</span> <span class="toc-text">Phoenix</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">6.1.</span> <span class="toc-text">实现原理</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/3b8.html" title="设计模式"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式"/></a><div class="content"><a class="title" href="/posts/3b8.html" title="设计模式">设计模式</a><time datetime="2023-01-19T02:49:02.000Z" title="发表于 2023-01-19 10:49:02">2023-01-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3b8.html" title="文章、教程记录"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_8.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文章、教程记录"/></a><div class="content"><a class="title" href="/posts/3b8.html" title="文章、教程记录">文章、教程记录</a><time datetime="2022-08-10T02:49:02.000Z" title="发表于 2022-08-10 10:49:02">2022-08-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1dft.html" title="java新特性"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/2021-05-11-00.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java新特性"/></a><div class="content"><a class="title" href="/posts/1dft.html" title="java新特性">java新特性</a><time datetime="2022-07-27T02:00:02.000Z" title="发表于 2022-07-27 10:00:02">2022-07-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1df.html" title="博客搬家"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_6.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="博客搬家"/></a><div class="content"><a class="title" href="/posts/1df.html" title="博客搬家">博客搬家</a><time datetime="2022-07-24T02:00:02.000Z" title="发表于 2022-07-24 10:00:02">2022-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1dfc.html" title="给函数取一个好的名字"><img src="https://raw.githubusercontent.com/pengyirui/blog_img/main/default_cover/default_cover_19.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="给函数取一个好的名字"/></a><div class="content"><a class="title" href="/posts/1dfc.html" title="给函数取一个好的名字">给函数取一个好的名字</a><time datetime="2022-01-01T02:00:02.000Z" title="发表于 2022-01-01 10:00:02">2022-01-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2023 By 葫芦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">-我可是有底线的-</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-silk-iota.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-silk-iota.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><center><script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1279698527'%3E%3C/span%3E%3Cscript src='https://s4.cnzz.com/z_stat.php%3Fid%3D1279698527%26online%3D2' type='text/javascript'%3E%3C/script%3E"));</script></center><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="122,115,116" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
